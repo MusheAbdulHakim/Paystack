@@ -1,15 +1,12 @@
 <?php
+declare(strict_types=1);
 
-namespace Nextpack\Nextpack\Facades;
+namespace Musheabdulhakim\Paystack\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Musheabdulhakim\Paystack\Paystack as PaystackService;
 
-/**
- * Class SampleFacadeAccessor
- *
- * @author  Mahmoud Zalt  <mahmoud@zalt.me>
- */
-class SampleFacadeAccessor extends Facade
+class Paystack extends Facade
 {
 
     /**
@@ -19,6 +16,6 @@ class SampleFacadeAccessor extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'nextpack.sample';
+        return PaystackService::class;
     }
 }

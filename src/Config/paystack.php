@@ -8,6 +8,12 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'greeting' => 'hello',
+    'base_url' => 'https://api.paystack.co',
+
+    'secret_key' => '',
+
+    'public_key' => '',
+    
+    'merchant_email' => ''
 
 ];

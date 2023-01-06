@@ -1,22 +1,17 @@
 <?php
 
-namespace Nextpack\Nextpack;
+namespace Musheabdulhakim\Paystack;
 
 use Illuminate\Config\Repository;
-use Nextpack\Nextpack\Exceptions\ConfigFileNotFoundException;
+use Musheabdulhakim\Paystack\Exceptions\ConfigFileNotFoundException;
 
-/**
- * Class Config
- *
- * @author  Mahmoud Zalt  <mahmoud@zalt.me>
- */
 class Config
 {
 
     /**
      * Config file name
      */
-    CONST CONFIG_FILE_NAME = "nextpack";
+    CONST CONFIG_FILE_NAME = "paystack";
 
     /**
      * @var  \Illuminate\Config\Repository
@@ -68,5 +63,9 @@ class Config
     public function get($key)
     {
         return $this->config->get($key);
+    }
+
+    public function set($key, $value){
+        return $this->config->set($key, $value);
     }
 }

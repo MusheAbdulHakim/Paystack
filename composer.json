@@ -1,37 +1,42 @@
 {
-  "name": "nextpack/nextpack",
-  "description": "Nextpack is a PHP Packages Framework (Starter Project)",
+  "name": "musheabdulhakim/paystack",
+  "description": "Paystack is a library for working with paystack payment gateway.",
   "license": "MIT",
   "keywords": [
-    "NextPack",
-    "Starter"
+    "php",
+    "github",
+    "laravel",
+    "payments",
+    "paystack",
+    "paystack.co",
+    "payment gateway"
   ],
   "authors": [
     {
-      "name": "Mahmoud Zalt",
-      "email": "mahmoud@zalt.me",
-      "homepage": "http://www.zalt.me",
-      "role": "Coffee Maker :)"
+      "name": "Mushe Abdul-Hakim",
+      "email": "musheabdulhakim99@gmail.com",
+      "homepage": "https://github.com/musheabdulhakim",
+      "role": "Developer"
     }
   ],
   "require": {
-    "php": ">=5.4.0",
-    "illuminate/config": "5.2.*"
+    "php": "^8.0.2",
+    "illuminate/config": "^9.45",
+    "guzzlehttp/guzzle": "^7.5"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.*",
-    "mockery/mockery": "0.*",
-    "symfony/var-dumper": "2.*"
+    "phpunit/phpunit": "^9.5.10",
+    "mockery/mockery": "^1.4.4",
+    "symfony/var-dumper": "^6.2"
   },
   "autoload": {
     "psr-4": {
-      "Nextpack\\Nextpack\\": "src",
-      "Nextpack\\Library\\": "src/library"
+      "Musheabdulhakim\\Paystack\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Nextpack\\Nextpack\\Tests\\": "tests"
+      "Musheabdulhakim\\Paystack\\Tests\\": "tests"
     }
   },
   "scripts": {
@@ -39,7 +44,15 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "1.0-dev"
+      "dev-master": "1.x-dev"
+    },
+    "laravel": {
+      "providers": [
+        "Musheabdulhakim\\Paystack\\ServiceProviders\\PaystackServiceProvider"
+      ],
+      "aliases": {
+        "Paystack": "Musheabdulhakim\\Paystack\\Facades\\Paystack"
+      }
     }
   },
   "minimum-stability": "stable"

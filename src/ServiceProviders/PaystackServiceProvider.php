@@ -1,18 +1,14 @@
 <?php
 
-namespace Nextpack\Nextpack\ServiceProviders;
+namespace Musheabdulhakim\Paystack\ServiceProviders;
 
+use Musheabdulhakim\Paystack\Paystack;
 use Illuminate\Support\ServiceProvider;
-use Nextpack\Nextpack\Contracts\SampleInterface;
-use Nextpack\Nextpack\Facades\SampleFacadeAccessor;
-use Nextpack\Nextpack\Sample;
+use Musheabdulhakim\Paystack\Contracts\PaystackInterface;
+use Musheabdulhakim\Paystack\Facades\Paystack as PaystackFacade;
 
-/**
- * Class NextpackServiceProvider
- *
- * @author  Mahmoud Zalt  <mahmoud@zalt.me>
- */
-class NextpackServiceProvider extends ServiceProvider
+
+class PaystackServiceProvider extends ServiceProvider
 {
 
     /**
@@ -70,8 +66,8 @@ class NextpackServiceProvider extends ServiceProvider
     private function implementationBindings()
     {
         $this->app->bind(
-            SampleInterface::class,
-            Sample::class
+            PaystackInterface::class,
+            Paystack::class
         );
     }
 
@@ -82,7 +78,7 @@ class NextpackServiceProvider extends ServiceProvider
     {
         // When users execute Laravel's vendor:publish command, the config file will be copied to the specified location
         $this->publishes([
-            __DIR__ . '/Config/nextpack.php' => config_path('nextpack.php'),
+            __DIR__ . '/Config/paystack.php' => config_path('paystack.php'),
         ]);
     }
 
@@ -91,15 +87,15 @@ class NextpackServiceProvider extends ServiceProvider
      */
     private function facadeBindings()
     {
-        // Register 'nextpack.say' instance container
-        $this->app['nextpack.sample'] = $this->app->share(function ($app) {
-            return $app->make(Sample::class);
+        // Register 'paystack' instance container
+        $this->app['paystack'] = $this->app->share(function ($app) {
+            return $app->make(Paystack::class);
         });
 
-        // Register 'Sample' Alias, So users don't have to add the Alias to the 'app/config/app.php'
+        // Register 'Paystack' Alias, So users don't have to add the Alias to the 'app/config/app.php'
         $this->app->booting(function () {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('Sample', SampleFacadeAccessor::class);
+            $loader->alias('Paystack', PaystackFacade::class);
         });
     }
 
@@ -110,7 +106,9 @@ class NextpackServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [];
+        return [
+            Paystack::class
+        ];
     }
 
     /**
