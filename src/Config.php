@@ -7,11 +7,10 @@ use Musheabdulhakim\Paystack\Exceptions\ConfigFileNotFoundException;
 
 class Config
 {
-
     /**
      * Config file name
      */
-    CONST CONFIG_FILE_NAME = "paystack";
+    public const CONFIG_FILE_NAME = "paystack";
 
     /**
      * @var  \Illuminate\Config\Repository
@@ -65,7 +64,8 @@ class Config
         return $this->config->get($key);
     }
 
-    public function set($key, $value){
+    public function set($key, $value)
+    {
         return $this->config->set($key, $value);
     }
 }

@@ -13,7 +13,7 @@ return [
     'secret_key' => '',
 
     'public_key' => '',
-    
+
     'merchant_email' => ''
 
 ];

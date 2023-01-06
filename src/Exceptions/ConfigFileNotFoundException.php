@@ -1,8 +1,7 @@
 <?php
-namespace Musheabdulhakim\Paystack\Exceptions;
 
+namespace Musheabdulhakim\Paystack\Exceptions;
 
 class ConfigFileNotFoundException extends Exception
 {
-
 }

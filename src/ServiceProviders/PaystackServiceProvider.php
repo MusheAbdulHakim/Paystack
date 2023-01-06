@@ -7,10 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Musheabdulhakim\Paystack\Contracts\PaystackInterface;
 use Musheabdulhakim\Paystack\Facades\Paystack as PaystackFacade;
 
-
 class PaystackServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -118,5 +116,4 @@ class PaystackServiceProvider extends ServiceProvider
     {
         // $this->app->register('...\...\...');
     }
-
 }

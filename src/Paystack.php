@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Musheabdulhakim\Paystack;
 
-
-class Paystack {
-
+class Paystack
+{
     private $config;
 
     private $client;
@@ -22,7 +23,7 @@ class Paystack {
      * @var string
      */
     public string $SECRET_KEY;
-    
+
     /**
      * Paystack api public key
      *
@@ -55,28 +56,27 @@ class Paystack {
         $this->MERCHANT_EMAIL = $this->config->get('merchant_email');
         $this->SECRET_KEY = $this->config->get('secret_key');
         $this->PUBLIC_KEY = $this->config->get('public_key');
-        
-        if(!empty($options) && (count($options) > 0)){
-            if(!empty($options['secret_key'])){
+
+        if (!empty($options) && (count($options) > 0)) {
+            if (!empty($options['secret_key'])) {
                 $this->SECRET_KEY = $options['secret_key'];
-                $this->config->set('secret_key',$this->SECRET_KEY);
+                $this->config->set('secret_key', $this->SECRET_KEY);
             }
-            if(!empty($options['public_key'])){
+            if (!empty($options['public_key'])) {
                 $this->PUBLIC_KEY = $options['public_key'];
-                $this->config->set('public_key',$this->PUBLIC_KEY);
+                $this->config->set('public_key', $this->PUBLIC_KEY);
             }
-            if(!empty($options['base_url'])){
+            if (!empty($options['base_url'])) {
                 $this->BASE_URL = $options['base_url'];
-                $this->config->set('base_url',$this->BASE_URL);
+                $this->config->set('base_url', $this->BASE_URL);
             }
-            if(!empty($options['merchant_email'])){
-                $this->MERCHANT_EMAIL = $options['merchant_email'];   
-                $this->config->set('merchant_email',$this->MERCHANT_EMAIL);
+            if (!empty($options['merchant_email'])) {
+                $this->MERCHANT_EMAIL = $options['merchant_email'];
+                $this->config->set('merchant_email', $this->MERCHANT_EMAIL);
             }
         }
 
         $this->client = $this->client();
-
     }
 
 
@@ -86,12 +86,13 @@ class Paystack {
      * @param string|null $url
      * @return boolean|string
      */
-    public function setBaseUrl(string $url = null){
-        if(!empty($url)){
+    public function setBaseUrl(string $url = null)
+    {
+        if (!empty($url)) {
             $this->BASE_URL = $url;
-            $this->config->set('base_url',$this->BASE_URL);
+            $this->config->set('base_url', $this->BASE_URL);
             return true;
-        }else{
+        } else {
             return $this->BASE_URL;
         }
     }
@@ -102,12 +103,13 @@ class Paystack {
      * @param string|null $key
      * @return boolean|string
      */
-    public function SecretKey(string $key = null){
-        if(!empty($key)){
+    public function SecretKey(string $key = null)
+    {
+        if (!empty($key)) {
             $this->SECRET_KEY = $key;
-            $this->config->set('secret_key',$this->SECRET_KEY);
+            $this->config->set('secret_key', $this->SECRET_KEY);
             return true;
-        }else{
+        } else {
             return $this->SECRET_KEY;
         }
     }
@@ -118,12 +120,13 @@ class Paystack {
      * @param string|null $email
      * @return boolean|string
      */
-    public function setMerchant(string $email = null){
-        if(!empty($email)){
+    public function setMerchant(string $email = null)
+    {
+        if (!empty($email)) {
             $this->MERCHANT_EMAIL = $email;
-            $this->config->set('merchant_email',$this->MERCHANT_EMAIL);
+            $this->config->set('merchant_email', $this->MERCHANT_EMAIL);
             return true;
-        }else{
+        } else {
             return $this->MERCHANT_EMAIL;
         }
     }
@@ -135,12 +138,13 @@ class Paystack {
      * @param string|null $key
      * @return boolean|string
      */
-    public function setPublicKey(string $key = null){
-        if(!empty($key)){
+    public function setPublicKey(string $key = null)
+    {
+        if (!empty($key)) {
             $this->PUBLIC_KEY = $key;
-            $this->config->set('public_key',$this->PUBLIC_KEY);
+            $this->config->set('public_key', $this->PUBLIC_KEY);
             return true;
-        }else{
+        } else {
             return $this->PUBLIC_KEY;
         }
     }
@@ -151,22 +155,24 @@ class Paystack {
      *
      * @return void
      */
-    private function client(){
+    private function client()
+    {
         $url = $this->BASE_URL;
         $secret = $this->SECRET_KEY;
-        $this->client = new Client($secret,$url);
+        $this->client = new Client($secret, $url);
         return $this->client;
     }
 
-    public function getConfig(){
-        $this->config->set('secret_key',$this->SECRET_KEY);
-        $this->config->set('public_key',$this->PUBLIC_KEY);
-        $this->config->set('base_url',$this->BASE_URL);
-        $this->config->set('merchant_email',$this->MERCHANT_EMAIL);
+    public function getConfig()
+    {
+        $this->config->set('secret_key', $this->SECRET_KEY);
+        $this->config->set('public_key', $this->PUBLIC_KEY);
+        $this->config->set('base_url', $this->BASE_URL);
+        $this->config->set('merchant_email', $this->MERCHANT_EMAIL);
         return $this->config;
     }
 
-    
+
     /**
      * Gets a list of Countries that Paystack currently supports
      *
@@ -183,9 +189,9 @@ class Paystack {
      * @param string $iso_2
      * @return array
      */
-    public function states(string $iso_2): array 
+    public function states(string $iso_2): array
     {
-        return $this->client->get('address_verification/states',[
+        return $this->client->get('address_verification/states', [
             'country' => strtoupper($iso_2)
         ]);
     }
@@ -193,13 +199,14 @@ class Paystack {
     /**
      * Get a list of all supported banks and their properties
      *
-     * @param string $country 
+     * @param string $country
      * The country from which to obtain the list of supported banks. e.g country=ghana or country=nigeria
-     * 
+     *
      * @param array $params
      * @return void
      */
-    public function banks(string $country = null, $params = []){
+    public function banks(string $country = null, $params = [])
+    {
         $params['country'] = $country;
         return $this->client->get('bank', $params);
     }
@@ -214,24 +221,25 @@ class Paystack {
      * @param array $params
      * @return mixed|\Musheabdulhakim\Paystack\Transaction
      */
-    public function transaction(string $email = null, $amount = null, $params = []){
-        if(!empty($email) && !empty($amount)){
+    public function transaction(string $email = null, $amount = null, $params = [])
+    {
+        if (!empty($email) && !empty($amount)) {
             return (new Transaction($this->client))->init($email, $amount, $params);
-        }else{
+        } else {
             return (new Transaction($this->client));
         }
     }
 
     /**
      * List transactions carried out on your integration.
-     * 
+     *
      * @link https://paystack.com/docs/api/#transaction-list
      *
      * @param array $params
      * @return void
      */
-    public function transactions($params = []){
+    public function transactions($params = [])
+    {
         return (new Transaction($this->client))->list($params);
     }
-
 }
