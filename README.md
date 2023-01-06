@@ -1,9 +1,7 @@
-# Nextpack (light)
+# Paystack
 
-[![Latest Stable Version](https://poser.pugx.org/nextpack/nextpack/v/stable)](https://packagist.org/packages/nextpack/nextpack) 
-[![License](https://poser.pugx.org/nextpack/nextpack/license)](https://packagist.org/packages/nextpack/nextpack)
-[![Mahmoud Zalt](https://img.shields.io/badge/Author-Mahmoud%20Zalt-orange.svg)](http://www.zalt.me)
-
+[![Latest Stable Version](https://poser.pugx.org/musheabdulhakim/paystack/v/stable)](https://packagist.org/packages/musheabdulhakim/paystack) 
+[![License](https://poser.pugx.org/musheabdulhakim/paystack/license)](https://packagist.org/packages/nextpack/nextpack)
 
 
 
@@ -11,27 +9,20 @@
 
 
 
+**Paystack** is a PHP & Laravel package, that makes working with https://paystack.com api a breeze.
+
+> Laravel and Core PHP supported library for Paystack
 
 
 
-**NextPack** is a PHP & Laravel Packages Starter, (Designed to help  building high quality PHP Packages faster).
-
->Clone NextPack and build your next open source package on top of it.
-
-**NextPack** strives to facilitates and boosts the development process of PHP Packages. And it highly recommend producing framework agnostic packages.
-
-Produce more open source composer packages with the least amount of time.
-
-![](https://s32.postimg.org/d2fler4qd/next_pack_logo_squared_v2.png)
 
 
+<a name="Features"></a>
+## Features
 
-<a name="Highlights"></a>
-## Highlights
+__Supported Features:__
 
-__Nextpack includes:__
-
-- **Rich package skeleton**, (containing common files required by almost every PHP package)
+- **Transactions**
 - Ready **Unit Test**
 - Ready **config files reader**
 - Ready **Servie Provider** (for Laravel)
