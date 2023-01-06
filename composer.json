@@ -8,7 +8,7 @@
     "laravel",
     "payments",
     "paystack",
-    "paystack.co",
+    "paystack.com",
     "payment gateway"
   ],
   "authors": [
@@ -22,7 +22,8 @@
   "require": {
     "php": "^8.0.2",
     "illuminate/config": "^9.45",
-    "guzzlehttp/guzzle": "^7.5"
+    "guzzlehttp/guzzle": "^7.5",
+    "friendsofphp/php-cs-fixer": "^3.13"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5.10",
