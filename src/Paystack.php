@@ -236,10 +236,31 @@ class Paystack
      * @link https://paystack.com/docs/api/#transaction-list
      *
      * @param array $params
-     * @return void
+     * @return array|string
      */
     public function transactions($params = [])
     {
         return (new Transaction($this->client))->list($params);
+    }
+
+    /**
+     * Initialize or Create a split payment on your integration
+     *
+     * @param array $params
+     * @return array|\TransactionSplit
+     */
+    public function transactionSplit($params = [])
+    {
+        if (!empty($params) && (count($params) > 0)) {
+            $name = $params['name'];
+            $type = $params['type'];
+            $currency = $params['currency'];
+            $subaccounts = $params['subaccounts'];
+            $bearer_type = $params['bearer_type'];
+            $bearer_subaccount = $params['bearer_subaccount'];
+            return (new TransactionSplit($this->client))->create($name, $type, $currency, $subaccounts, $bearer_type, $bearer_subaccount);
+        } else {
+            return (new TransactionSplit($this->client));
+        }
     }
 }

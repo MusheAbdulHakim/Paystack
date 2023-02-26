@@ -23,29 +23,51 @@ class Client
     }
 
 
-    public function get(string $url, array $query = [])
+    /**
+     * Make Get Request to api endpoint.
+     *
+     * @param string $url
+     * @param array $query
+     * @return mixed
+     */
+    public function get(string $url, array $query = []): mixed
     {
-        $response = $this->http->get($url, [
-            'headers' => [
-                'Authorization' => "Bearer {$this->secret_key}",
-                'Accept'        => "application/json",
-                'Cache-Control' => "no-cache"
-            ],
-            'query' => $query
-        ]);
-        return json_decode($response->getBody()->getContents(), true);
+        try {
+            $response = $this->http->get($url, [
+                'headers' => [
+                    'Authorization' => "Bearer {$this->secret_key}",
+                    'Accept'        => "application/json",
+                    'Cache-Control' => "no-cache"
+                ],
+                'query' => $query
+            ]);
+            return json_decode($response->getBody()->getContents(), true);
+        } catch(\GuzzleHttp\Exception\ClientException $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function post(string $url, array $query = [])
+    /**
+     * Make Post Request to api endpoint
+     *
+     * @param string $url
+     * @param array $query
+     * @return mixed
+     */
+    public function post(string $url, array $query = []): mixed
     {
-        $response = $this->http->post($url, [
-            'headers' => [
-                'Authorization' => "Bearer {$this->secret_key}",
-                'Cache-Control' => "no-cache"
-            ],
-            'form_params' => $query,
-        ]);
-        return json_decode($response->getBody()->getContents(), true);
+        try {
+            $response = $this->http->post($url, [
+                'headers' => [
+                    'Authorization' => "Bearer {$this->secret_key}",
+                    'Cache-Control' => "no-cache"
+                ],
+                'form_params' => $query,
+            ]);
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            return $e->getMessage();
+        }
     }
 
     public function curlPost(string $url, array $query = [])
