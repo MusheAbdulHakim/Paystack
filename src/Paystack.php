@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Musheabdulhakim\Paystack;
 
+use Dotenv\Dotenv;
+
 class Paystack
 {
     private $config;
@@ -51,6 +53,8 @@ class Paystack
     public function __construct($options = [])
     {
         $this->config = new Config();
+        $dotenv = Dotenv::createMutable(__DIR__ .'/..');
+        $dotenv->safeLoad();
 
         $this->BASE_URL = $this->config->get('base_url');
         $this->MERCHANT_EMAIL = $this->config->get('merchant_email');
@@ -58,22 +62,35 @@ class Paystack
         $this->PUBLIC_KEY = $this->config->get('public_key');
 
         if (!empty($options) && (count($options) > 0)) {
-            if (!empty($options['secret_key'])) {
-                $this->SECRET_KEY = $options['secret_key'];
-                $this->config->set('secret_key', $this->SECRET_KEY);
+            if (!empty($options['secret_key']) || !empty($options['SECRET_KEY'])) {
+                $this->SECRET_KEY = $options['secret_key'] ?? $options['SECRET_KEY'];
+                $this->config->set('secret_key', ($this->SECRET_KEY ?? $options['SECRET_KEY']));
             }
-            if (!empty($options['public_key'])) {
-                $this->PUBLIC_KEY = $options['public_key'];
-                $this->config->set('public_key', $this->PUBLIC_KEY);
+            if (!empty($options['public_key']) || !empty($options['PUBLIC_KEY'])) {
+                $this->PUBLIC_KEY = $options['public_key'] ?? $options['PUBLIC_KEY'];
+                $this->config->set('public_key', ($this->PUBLIC_KEY ?? $options['PUBLIC_KEY']));
             }
-            if (!empty($options['base_url'])) {
-                $this->BASE_URL = $options['base_url'];
-                $this->config->set('base_url', $this->BASE_URL);
+            if (!empty($options['base_url']) || !empty($options['BASE_URL'])) {
+                $this->BASE_URL = $options['base_url'] ?? $options['BASE_URL'];
+                $this->config->set('base_url', ($this->BASE_URL ?? $options['BASE_URL']));
             }
-            if (!empty($options['merchant_email'])) {
-                $this->MERCHANT_EMAIL = $options['merchant_email'];
-                $this->config->set('merchant_email', $this->MERCHANT_EMAIL);
+            if (!empty($options['merchant_email']) || !empty($options['MERCHANT_EMAIL'])) {
+                $this->MERCHANT_EMAIL = $options['merchant_email'] ?? $options['MERCHANT_EMAIL'];
+                $this->config->set('merchant_email', ($this->MERCHANT_EMAIL?? $options['MERCHANT_EMAIL']));
             }
+        }
+
+        if(!empty($_ENV['SECRET_KEY'])) {
+            $this->SECRET_KEY = $_ENV['SECRET_KEY'];
+            $this->config->set('secret_key', $_ENV['SECRET_KEY']);
+        }
+        if(!empty($_ENV['PUBLIC_KEY'])) {
+            $this->PUBLIC_KEY = $_ENV['PUBLIC_KEY'];
+            $this->config->set('public_key', $_ENV['PUBLIC_KEY']);
+        }
+        if(!empty($_ENV['MERCHANT_EMAIL'])) {
+            $this->MERCHANT_EMAIL = $_ENV['MERCHANT_EMAIL'];
+            $this->config->set('merchant_email', $_ENV['MERCHANT_EMAIL']);
         }
 
         $this->client = $this->client();
@@ -86,7 +103,7 @@ class Paystack
      * @param string|null $url
      * @return boolean|string
      */
-    public function setBaseUrl(string $url = null)
+    public function baseUrl(string $url = null)
     {
         if (!empty($url)) {
             $this->BASE_URL = $url;
@@ -103,7 +120,7 @@ class Paystack
      * @param string|null $key
      * @return boolean|string
      */
-    public function SecretKey(string $key = null)
+    public function secretKey(string $key = null)
     {
         if (!empty($key)) {
             $this->SECRET_KEY = $key;
@@ -120,7 +137,7 @@ class Paystack
      * @param string|null $email
      * @return boolean|string
      */
-    public function setMerchant(string $email = null)
+    public function merchant(string $email = null)
     {
         if (!empty($email)) {
             $this->MERCHANT_EMAIL = $email;
@@ -138,7 +155,7 @@ class Paystack
      * @param string|null $key
      * @return boolean|string
      */
-    public function setPublicKey(string $key = null)
+    public function publicKey(string $key = null)
     {
         if (!empty($key)) {
             $this->PUBLIC_KEY = $key;
