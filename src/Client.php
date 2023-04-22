@@ -72,7 +72,10 @@ class Client
 
     public function curlPost(string $url, array $query = [])
     {
-        $url = "https://api.paystack.co/".$url;
+        $url = $this->base_url.'/'.$url;
+        if((substr($this->base_url, -1) === '/')) {
+            $url = $this->base_url.$url;
+        }
         $fields_string = http_build_query($query);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
