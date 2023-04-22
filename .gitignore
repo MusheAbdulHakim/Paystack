@@ -16,3 +16,5 @@ vendor
 ehthumbs.db
 Thumbs.db
 .env
+*.cache
+
