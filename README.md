@@ -41,7 +41,7 @@ __Supported Features:__
 ## Installation
 
 
-##### Software Requirement
+##### Package Requirement
 - Git
 - Composer
 
@@ -86,11 +86,6 @@ $ ./vendor/bin/phpunit
 ```
 
 
-
-
-## Credits
-
-- [Mahmoud Zalt](https://github.com/Mahmoudz)
 
 
 
