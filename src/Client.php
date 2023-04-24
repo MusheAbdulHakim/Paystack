@@ -3,8 +3,9 @@
 declare(strict_types=1);
 
 namespace Musheabdulhakim\Paystack;
+use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
 
-class Client
+class Client implements PaystackClientInterface
 {
     private $secret_key;
 
