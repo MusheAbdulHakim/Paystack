@@ -20,5 +20,11 @@
             <directory suffix=".php">./src</directory>
         </include>
     </coverage>
-    
+
+    <php>
+        <env name="SECRET_KEY" value="test_secret_key"/>
+        <env name="PUBLIC_KEY" value="test_public_key" />
+        <env name="MERCHANT_EMAIL" value="test@example.com" />
+    </php>
+
 </phpunit>
