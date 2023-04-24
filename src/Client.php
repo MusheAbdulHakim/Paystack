@@ -70,6 +70,30 @@ class Client
         }
     }
 
+
+    /**
+     * Make PUT Request to api endpoint
+     *
+     * @param string $url
+     * @param array $query
+     * @return mixed
+     */
+    public function put(string $url, array $query = []): mixed
+    {
+        try {
+            $response = $this->http->put($url, [
+                'headers' => [
+                    'Authorization' => "Bearer {$this->secret_key}",
+                    'Cache-Control' => "no-cache"
+                ],
+                'form_params' => $query,
+            ]);
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function curlPost(string $url, array $query = [])
     {
         $url = $this->base_url.'/'.$url;
