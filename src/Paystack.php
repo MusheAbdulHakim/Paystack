@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Musheabdulhakim\Paystack;
 
 use Dotenv\Dotenv;
+use Musheabdulhakim\Paystack\Api\Customer;
+use Musheabdulhakim\Paystack\Api\Transaction;
+use Musheabdulhakim\Paystack\Api\TransactionSplit;
 
 class Paystack
 {
@@ -170,17 +173,24 @@ class Paystack
     /**
      * Http Client
      *
-     * @return void
+     * @return Client
      */
     private function client()
     {
-        $url = $this->BASE_URL;
         $secret = $this->SECRET_KEY;
-        $this->client = new Client($secret, $url);
+        $url = $this->BASE_URL;
+        $client = $this->config->get('client');
+        $this->client = (new $client($secret,$url));
         return $this->client;
     }
 
-    public function getConfig()
+
+    /**
+     * Get Config Items
+     *
+     * @return mixed
+     */
+    public function getConfig(): mixed
     {
         $this->config->set('secret_key', $this->SECRET_KEY);
         $this->config->set('public_key', $this->PUBLIC_KEY);
@@ -236,7 +246,7 @@ class Paystack
      * @param string|null $email
      * @param string $amount
      * @param array $params
-     * @return mixed|\Musheabdulhakim\Paystack\Transaction
+     * @return mixed|\Musheabdulhakim\Paystack\Transaction::class
      */
     public function transaction(string $email = null, $amount = null, $params = [])
     {
@@ -264,7 +274,7 @@ class Paystack
      * Initialize or Create a split payment on your integration
      *
      * @param array $params
-     * @return array|\TransactionSplit
+     * @return array|\TransactionSplit::class
      */
     public function transactionSplit($params = [])
     {
@@ -275,9 +285,30 @@ class Paystack
             $subaccounts = $params['subaccounts'];
             $bearer_type = $params['bearer_type'];
             $bearer_subaccount = $params['bearer_subaccount'];
-            return (new TransactionSplit($this->client))->create($name, $type, $currency, $subaccounts, $bearer_type, $bearer_subaccount);
+            return (new TransactionSplit($this->client))->create($name, $type, $currency, $bearer_type, $bearer_subaccount, $subaccounts);
         } else {
             return (new TransactionSplit($this->client));
+        }
+    }
+
+
+   /**
+    * Create a customer or initialize the customer class
+    *
+    * @param array|null $params
+    * @return array|Customer
+    */
+    public function customer(?array $params = []): array|Customer
+    {
+        if (!empty($params) && (count($params) > 0)) {
+            $first_name = $params['first_name'];
+            $last_name = $params['last_name'];
+            $email = $params['email'];
+            $phone = $params['phone'];
+            $metadata = $params['metadata'] ?? null;
+            return (new Customer($this->client))->create($first_name, $last_name, $email, $phone, $metadata);
+        } else {
+            return (new Customer($this->client));
         }
     }
 }
