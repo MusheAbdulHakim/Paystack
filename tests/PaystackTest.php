@@ -12,10 +12,10 @@ class PaystackTest extends TestCase
     protected function setUp(): void
     {
         $this->paystack = new Paystack([
-            'secret_key' => 'test_secret_key',
-            'public_key' => 'test_public_key',
+            'secret_key' => getenv('SECRET_KEY'),
+            'public_key' => getenv('PUBLIC_KEY'),
+            'merchant_email' => getenv('MERCHANT_EMAIL'),
             'base_url' => 'https://api.test.paystack.co',
-            'merchant_email' => 'test@example.com'
         ]);
     }
 
@@ -35,10 +35,10 @@ class PaystackTest extends TestCase
     public function testConstructorSetsPropertiesCorrectly()
     {
         $options = [
-            'secret_key' => 'test_secret_key',
-            'public_key' => 'test_public_key',
-            'base_url' => 'https://api.test.paystack.co',
-            'merchant_email' => 'test@example.com'
+            'secret_key' => getenv('SECRET_KEY'),
+            'public_key' => getenv('PUBLIC_KEY'),
+            'merchant_email' => getenv('MERCHANT_EMAIL'),
+            'base_url' => 'https://api.test.paystack.co'
         ];
         $this->assertEquals($options['base_url'], $this->paystack->BASE_URL);
         $this->assertEquals($options['merchant_email'], $this->paystack->MERCHANT_EMAIL);
@@ -48,9 +48,6 @@ class PaystackTest extends TestCase
 
     public function testConstructorReadsEnvVariables()
     {
-        putenv('SECRET_KEY=test_secret_key');
-        putenv('PUBLIC_KEY=test_public_key');
-        putenv('MERCHANT_EMAIL=test@example.com');
         $this->assertEquals('test_secret_key', $this->paystack->SECRET_KEY);
         $this->assertEquals('test_public_key', $this->paystack->PUBLIC_KEY);
         $this->assertEquals('test@example.com', $this->paystack->MERCHANT_EMAIL);
@@ -99,6 +96,10 @@ class PaystackTest extends TestCase
         $this->assertEquals('test_public_key', $this->paystack->publicKey());
 
         $this->assertEquals($this->paystack->PUBLIC_KEY, $this->paystack->publicKey());
+    }
+
+    public function testAndVerifyPublicKEY(){
+        $this->assertEquals($this->paystack->PUBLIC_KEY,$_ENV['PUBLIC_KEY']);
     }
 
 }
