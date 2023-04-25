@@ -9,7 +9,7 @@
 
 
 
-**Paystack** is a PHP & Laravel package, that makes working with https://paystack.com api a breeze.
+**Paystack** is a PHP & Laravel package, that makes working with [Paystack](https://paystack.com) api a breeze.
 
 > Laravel and Core PHP supported library for Paystack
 
@@ -20,17 +20,16 @@
 <a name="Features"></a>
 ## Features
 
-__Supported Features:__
 
-- **Transactions**
-- Ready **Unit Test**
-- Ready **config files reader**
-- Ready **Servie Provider** (for Laravel)
-- Ready **Facade Class** (for Laravel)
-- Version Control: **Git** (`.gitattributes`, `.gitignore`)
-- Continuous Integration: **Travis** and **Scrutinizer** (`.scrutinizer.yml`, `.travis.yml`)
-- Testing: **PHPUnit** (`phpunit.xml`)
-- Package Manager: **Composer** (`composer.json`)  
+- Customers
+
+- Transactions
+
+- Transaction Split
+
+- Terminal
+
+- Misc
   
 
 
@@ -40,40 +39,81 @@ __Supported Features:__
 <a name="Installation"></a>
 ## Installation
 
+1. ### Using Composer
+    - 
+    ```php
+    composer require musheabdulhakim/paystack
+    ```
+    - 
+    ``` php
+    require_once __DIR__ . "/vendor/autoload.php";
+    ```
+    
+2. ### Manual
+- Download the archive
+- Extract into your project
+- Run composer
+    ```php
+    composer install
+    ```
+- And lastly
+    ``` php
+    require_once __DIR__ . "/vendor/autoload.php";
+    ```
 
-##### Package Requirement
-- Git
-- Composer
+3. ### Clone the repository
+    ```php
+    git clone https://github.com/MusheAbdulHakim/Paystack.git
+    ```
+
+    ```php
+    composer install
+    ```
+
+    ``` php
+    require_once __DIR__ . "/vendor/autoload.php";
+    ```
+
+## Initialize Paystack 
+1. Using ``.env`` file, set the values of your keys
+    ```php
+    SECRET_KEY = "sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    PUBLIC_KEY = "pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    MERCHANT_EMAIL = "test@example.com"
+    ```
+
+    ```php
+        <?php
+
+        use Musheabdulhakim\Paystack\Paystack;
+
+        include_once('./vendor/autoload.php');
+        $paystack = new Paystack();
+    ```
 
 
-##### Installation Steps
+2. If you don't want to use .env file, you can set the values by passing them to the initialized class. 
+    ```php
+        <?php
 
-1. `git clone https://github.com/nextpack/nextpack.git`
-2. `composer update`
-3. make sure everything is OK by running the tests `phpunit`
+        use Musheabdulhakim\Paystack\Paystack;
+
+        include_once('./vendor/autoload.php');
+
+        $paystack = new Paystack([
+            'SECRET_KEY' => 'sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+            'PUBLIC_KEY' => 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+            'MERCHANT_EMAIL' => 'test@example.com'
+        ]);
+    ```
+
 
 
 
 
 <a name="Customization"></a>
 ## Customization
-
-After you install a fresh copy of Nextpack, the only thing you need to do is customizing it to meet your needs, before start codig your package.
-
-
-The steps include renaming the code samples shipped with the Nextpack:
-
-1. Change the namespace of the application from `Nextpack\Nextpack` to your `Vendor-name\Package-name`. *(you can do this using the [Replace All] feature of your IDE).*
-2. Update the following values in `composer.json`:  `name`, `description`, `keywords`, `authors`, `autoload` and don't forget to update the `namespaces`. (you might need to run `composer dump-autoload` after the changes).
-3. Run `composer install`
-4. Rename `SampleFacadeAccessor.php` and update the returned string inside the `getFacadeAccessor()` function.
-5. Rename `NextpackServiceProvider` and update the content of the following functions: `facadeBindings()`, `configPublisher()` and `implementationBindings()`.
-6. Update the config file `nextpack.php`, (or remove it if not necessary).
-7. Delete this `README.md` file. And rename the `README.md.READY` to `README.md`.
-8. Update `LICENSE` by replacing `::Vendor-Name` and `::Package-Name` with your vendor and package names.
-9. Edit the new `README.md` 
-13. Delete the sample `tests` function. Keep the `TestCase.php`.
-14. Update the "testsuite" name in the `phpunit.xml`.
+1. You can override the Client class and use your own http client
 
 
 
@@ -91,4 +131,4 @@ $ ./vendor/bin/phpunit
 
 ## License
 
-The MIT License (MIT). See the [License File](https://github.com/nextpack/nextpack/blob/master/LICENSE) for more information.
+The MIT License (MIT). See the [License File](https://github.com/MusheAbdulHakim/Paystack/blob/master/LICENSE) for more information.
