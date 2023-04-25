@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Musheabdulhakim\Paystack;
 
-use Dotenv\Dotenv;
 use Musheabdulhakim\Paystack\Api\Customer;
 use Musheabdulhakim\Paystack\Api\Transaction;
 use Musheabdulhakim\Paystack\Api\TransactionSplit;
@@ -20,28 +19,28 @@ class Paystack
      *
      * @var string
      */
-    public string $BASE_URL;
+    private string $BASE_URL;
 
     /**
      * Paystack api secret key
      *
      * @var string
      */
-    public string $SECRET_KEY;
+    private string $SECRET_KEY;
 
     /**
      * Paystack api public key
      *
      * @var string
      */
-    public string $PUBLIC_KEY;
+    private string $PUBLIC_KEY;
 
     /**
      * Paystack merchant email
      *
      * @var string
      */
-    public $MERCHANT_EMAIL;
+    private $MERCHANT_EMAIL;
 
     /**
      * Setup Options for paystack.
@@ -53,11 +52,26 @@ class Paystack
      *
      * @param array $options
      */
-    public function __construct($options = [])
+    public function __construct($options = [], $loadEnv = true)
     {
         $this->config = new Config();
-        $dotenv = Dotenv::createMutable(__DIR__ .'/..');
-        $dotenv->safeLoad();
+
+        if($loadEnv){
+            $dotenv = \Dotenv\Dotenv::createMutable(__DIR__ .'/..');
+            $dotenv->safeLoad();
+            if(!empty($_ENV['SECRET_KEY'])) {
+                $this->SECRET_KEY = $_ENV['SECRET_KEY'];
+                $this->config->set('secret_key', $_ENV['SECRET_KEY']);
+            }
+            if(!empty($_ENV['PUBLIC_KEY'])) {
+                $this->PUBLIC_KEY = $_ENV['PUBLIC_KEY'];
+                $this->config->set('public_key', $_ENV['PUBLIC_KEY']);
+            }
+            if(!empty($_ENV['MERCHANT_EMAIL'])) {
+                $this->MERCHANT_EMAIL = $_ENV['MERCHANT_EMAIL'];
+                $this->config->set('merchant_email', $_ENV['MERCHANT_EMAIL']);
+            }
+        }
 
         $this->BASE_URL = $this->config->get('base_url');
         $this->MERCHANT_EMAIL = $this->config->get('merchant_email');
@@ -83,22 +97,8 @@ class Paystack
             }
         }
 
-        if(!empty($_ENV['SECRET_KEY'])) {
-            $this->SECRET_KEY = $_ENV['SECRET_KEY'];
-            $this->config->set('secret_key', $_ENV['SECRET_KEY']);
-        }
-        if(!empty($_ENV['PUBLIC_KEY'])) {
-            $this->PUBLIC_KEY = $_ENV['PUBLIC_KEY'];
-            $this->config->set('public_key', $_ENV['PUBLIC_KEY']);
-        }
-        if(!empty($_ENV['MERCHANT_EMAIL'])) {
-            $this->MERCHANT_EMAIL = $_ENV['MERCHANT_EMAIL'];
-            $this->config->set('merchant_email', $_ENV['MERCHANT_EMAIL']);
-        }
-
         $this->client = $this->client();
     }
-
 
     /**
      * Set or Get paystack base api url. default (https://api.paystack.co)
@@ -140,7 +140,7 @@ class Paystack
      * @param string|null $email
      * @return boolean|string
      */
-    public function merchant(string $email = null)
+    public function merchantEmail(string $email = null)
     {
         if (!empty($email)) {
             $this->MERCHANT_EMAIL = $email;
