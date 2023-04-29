@@ -29,9 +29,9 @@ class Client implements PaystackClientInterface
      *
      * @param string $url
      * @param array $query
-     * @return mixed
+     * @return array
      */
-    public function get(string $url, array $query = []): mixed
+    public function get(string $url, array $query = []): array
     {
         try {
             $response = $this->http->get($url, [
@@ -44,7 +44,7 @@ class Client implements PaystackClientInterface
             ]);
             return json_decode($response->getBody()->getContents(), true);
         } catch(\GuzzleHttp\Exception\ClientException $e) {
-            return $e->getMessage();
+            return array($e->getMessage());
         }
     }
 
@@ -53,9 +53,9 @@ class Client implements PaystackClientInterface
      *
      * @param string $url
      * @param array $query
-     * @return mixed
+     * @return array
      */
-    public function post(string $url, array $query = []): mixed
+    public function post(string $url, array $query = []): array
     {
         try {
             $response = $this->http->post($url, [
@@ -67,7 +67,7 @@ class Client implements PaystackClientInterface
             ]);
             return json_decode($response->getBody()->getContents(), true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            return $e->getMessage();
+            return array($e->getMessage());
         }
     }
 
@@ -77,9 +77,9 @@ class Client implements PaystackClientInterface
      *
      * @param string $url
      * @param array $query
-     * @return mixed
+     * @return array
      */
-    public function put(string $url, array $query = []): mixed
+    public function put(string $url, array $query = []): array
     {
         try {
             $response = $this->http->put($url, [
@@ -91,7 +91,7 @@ class Client implements PaystackClientInterface
             ]);
             return json_decode($response->getBody()->getContents(), true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            return $e->getMessage();
+            return array($e->getMessage());
         }
     }
 
