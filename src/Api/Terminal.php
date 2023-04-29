@@ -16,7 +16,7 @@ class Terminal
         $this->client = $client;
     }
 
-    public function sendEvent(string $terminal_id, string $type, string $action, $data = []): mixed
+    public function sendEvent(string $terminal_id, string $type, string $action, $data = []): array
     {
         $url = "terminal/{$terminal_id}/event";
         $params['type'] = $type;
@@ -31,11 +31,11 @@ class Terminal
      *
      * @param string $terminal_id The ID of the Terminal the event was sent to.
      * @param string $event_id The ID of the event that was sent to the Terminal
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/terminal#fetch-event-status
      */
-    public function fetchEvent(string $terminal_id, string $event_id): mixed
+    public function fetchEvent(string $terminal_id, string $event_id): array
     {
         $url = "terminal/{$terminal_id}/event/{$event_id}";
         return $this->client->get($url);
@@ -46,11 +46,11 @@ class Terminal
      * Check the availiability of a Terminal before sending an event to it
      *
      * @param string $terminal_id The ID of the Terminal you want to check
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/terminal#fetch-terminal-status
      */
-    public function status(string $terminal_id): mixed
+    public function status(string $terminal_id): array
     {
         $url = "terminal/{$terminal_id}/presence";
         return $this->client->get($url);
@@ -61,11 +61,11 @@ class Terminal
      * List the Terminals available on your integration
      *
      * @param array|null $params Query Parameters
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/terminal#list
      */
-    public function list(?array $params = []): mixed
+    public function list(?array $params = []): array
     {
         return $this->client->get('terminal');
     }
@@ -75,11 +75,11 @@ class Terminal
      * Get the details of a Terminal
      *
      * @param string $terminal_id The ID of the Terminal the event was sent to.
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/terminal#fetch
      */
-    public function terminal(string $terminal_id): mixed
+    public function terminal(string $terminal_id): array
     {
         $url = "terminal/{$terminal_id}";
         return $this->client->get($url);
@@ -92,11 +92,11 @@ class Terminal
      * @param string $terminal_id The ID of the Terminal you want to update
      * @param string $name Name of the terminal
      * @param string $address Name of the terminal
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/terminal#update
      */
-    public function update(string $terminal_id, string $name, string $address): mixed
+    public function update(string $terminal_id, string $name, string $address): array
     {
         $url = "terminal/{$terminal_id}";
         $params['name'] = $name;
@@ -108,11 +108,11 @@ class Terminal
      * Activate your debug device by linking it to your integration
      *
      * @param string $serial_number Device Serial Number
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/terminal#commission
      */
-    public function commission(string $serial_number): mixed
+    public function commission(string $serial_number): array
     {
         $params['serial_number'] = $serial_number;
         return $this->client->post("terminal/commission_device", $params);
@@ -123,11 +123,11 @@ class Terminal
      * Unlink your debug device from your integration
      *
      * @param string $serial_number Device Serial Number
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/terminal#decommission
      */
-    public function decommission(string $serial_number): mixed
+    public function decommission(string $serial_number): array
     {
         $params['serial_number'] = $serial_number;
         return $this->client->post("terminal/decommission_device", $params);

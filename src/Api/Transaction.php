@@ -25,9 +25,9 @@ class Transaction
      * @param string $email
      * @param string $amount
      * @param array $params
-     * @return mixed
+     * @return array
      */
-    public function init(string $email, string $amount, $params = []): mixed
+    public function init(string $email, string $amount, $params = []): array
     {
         $params['email'] = $email;
         $params['amount'] = $amount;
@@ -40,9 +40,9 @@ class Transaction
      * @link https://paystack.com/docs/api/#transaction-list
      *
      * @param array $params
-     * @return mixed
+     * @return array
      */
-    public function list($params = []): mixed
+    public function list($params = []): array
     {
         return $this->client->get('transaction', $params);
     }
@@ -52,9 +52,9 @@ class Transaction
      *
      * @link https://paystack.com/docs/api/#transaction-verify
      * @param string $reference
-     * @return mixed
+     * @return array
      */
-    public function verify(string $reference): mixed
+    public function verify(string $reference): array
     {
         $params['reference'] = $reference;
         return $this->client->get('transaction/verify/'.$reference);
@@ -65,9 +65,9 @@ class Transaction
      *
      * @link https://paystack.com/docs/api/#transaction-fetch
      * @param integer $id .An ID for the transaction to fetch
-     * @return mixed
+     * @return array
      */
-    public function get(int $id): mixed
+    public function get(int $id): array
     {
         return $this->client->get('transaction/'.$id);
     }
@@ -78,9 +78,9 @@ class Transaction
      *
      * @link https://paystack.com/docs/api/#transaction-fetch
      * @param integer $id .An ID for the transaction to fetch
-     * @return mixed
+     * @return array
      */
-    public function fetch(int $id): mixed
+    public function fetch(int $id): array
     {
         return $this->client->get('transaction/'.$id);
     }
@@ -93,9 +93,9 @@ class Transaction
      * @param string $amount
      * @param string $authorization_code
      * @param array $params
-     * @return mixed
+     * @return array
      */
-    public function chargeAuth(string $email, string $amount, string $authorization_code, $params = []): mixed
+    public function chargeAuth(string $email, string $amount, string $authorization_code, $params = []): array
     {
         $params['email'] = $email;
         $params['amount'] = $amount;
@@ -121,9 +121,9 @@ class Transaction
      * @param string $amount
      * @param string $authorization_code
      * @param array $params
-     * @return mixed
+     * @return array
      */
-    public function checkAuth(string $email, string $amount, string $authorization_code, $params = []): mixed
+    public function checkAuth(string $email, string $amount, string $authorization_code, $params = []): array
     {
         $params['email'] = $email;
         $params['amount'] = $amount;
@@ -138,9 +138,9 @@ class Transaction
      *
      * @link https://paystack.com/docs/api/#transaction-view-timeline
      * @param string $id_or_reference .The ID or the reference of the transaction
-     * @return mixed
+     * @return array
      */
-    public function timeline(string $id_or_reference): mixed
+    public function timeline(string $id_or_reference): array
     {
         return $this->client->get('transaction/timeline/'.$id_or_reference);
     }
@@ -150,9 +150,9 @@ class Transaction
      *
      * @link https://paystack.com/docs/api/#transaction-totals
      * @param array $params
-     * @return mixed
+     * @return array
      */
-    public function total($params = []): mixed
+    public function total($params = []): array
     {
         return $this->client->get('transaction/totals');
     }
@@ -162,9 +162,9 @@ class Transaction
      *
      * @link https://paystack.com/docs/api/#transaction-export
      * @param array $params
-     * @return mixed
+     * @return array
      */
-    public function export($params = []): mixed
+    public function export($params = []): array
     {
         return $this->client->get('transaction/export');
     }
@@ -179,9 +179,9 @@ class Transaction
       * @param string $email Customer's email address (attached to the authorization code)
       * @param array $params
       * @link https://paystack.com/docs/api/#transaction-partial-debit
-      * @return mixed
+      * @return array
       */
-    public function partialDebit(string $authorization_code, string $currency, string $amount, string $email, $params = []): mixed
+    public function partialDebit(string $authorization_code, string $currency, string $amount, string $email, $params = []): array
     {
         $params['authorization_code'] = $authorization_code;
         $params['currency'] = $currency;

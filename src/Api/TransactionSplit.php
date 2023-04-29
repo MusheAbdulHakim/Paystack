@@ -29,9 +29,9 @@ class TransactionSplit
      * @param string $bearer_type Any of subaccount | account | all-proportional | all
      * @param string $bearer_subaccount Subaccount code
      * @link https://paystack.com/docs/api/split#create
-     * @return mixed
+     * @return array
      */
-    public function create(string $name, string $type, string $currency, string $bearer_type, string $bearer_subaccount, $subaccounts = []): mixed
+    public function create(string $name, string $type, string $currency, string $bearer_type, string $bearer_subaccount, $subaccounts = []): array
     {
         $params['name'] = $name;
         $params['type'] = $type;
@@ -47,11 +47,11 @@ class TransactionSplit
      * List the transaction splits available on your integration
      *
      * @param array|null $params Query Parameters
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/split#list
      */
-    public function list(?array $params = []): mixed
+    public function list(?array $params = []): array
     {
         return $this->client->get('split', $params);
     }
@@ -60,11 +60,11 @@ class TransactionSplit
      * Get details of a split on your integration.
      *
      * @param string $id Split Id
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/split#fetch
      */
-    public function fetch(string $id): mixed
+    public function fetch(string $id): array
     {
         $url = "split/{$id}";
         return $this->client->get($url);
@@ -76,11 +76,11 @@ class TransactionSplit
      *
      * @param string $id Split Id
      * @param array $params
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/split#update
      */
-    public function update(string $id, $params = []): mixed
+    public function update(string $id, $params = []): array
     {
         $url = "split/{$id}";
         return $this->client->put($url, $params);
@@ -93,11 +93,11 @@ class TransactionSplit
      * @param string $id Split Id
      * @param string $subaccount This is the sub account code
      * @param integer $share This is the transaction share for the subaccount
-     * @return mixed
+     * @return array
      *
      * @link https://paystack.com/docs/api/split#add-subaccount
      */
-    public function add(string $id, string $subaccount, int $share): mixed
+    public function add(string $id, string $subaccount, int $share): array
     {
         $url = "split/{$id}/subaccount/add";
         $params['subaccount'] = $subaccount;
@@ -110,10 +110,10 @@ class TransactionSplit
      *
      * @param string $id Split Id
      * @param string $subaccount This is the sub account code
-     * @return mixed
+     * @return array
      * @url https://paystack.com/docs/api/split#remove-subaccount
      */
-    public function remove(string $id, string $subaccount): mixed
+    public function remove(string $id, string $subaccount): array
     {
         $url = "split/{$id}/subaccount/remove";
         $params['subaccount'] = $subaccount;
