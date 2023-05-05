@@ -31,7 +31,13 @@ interface PaystackClientInterface {
      */
     public function put(string $url, $query = []): array;
 
-
+    /**
+     * Make DELETE Request to api endpoint
+     *
+     * @param string $url
+     * @param array $query
+     * @return array
+     */
     public function delete(string $url, $query = []): array;
 
 }
