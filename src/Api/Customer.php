@@ -56,7 +56,8 @@ class Customer
      * @return array
      * @link https://paystack.com/docs/api/customer#fetch
      */
-    public function fetch(string $email_or_code): array{
+    public function fetch(string $email_or_code): array
+    {
         return $this->client->get("customer/{$email_or_code}");
     }
 
@@ -67,18 +68,19 @@ class Customer
      * @return array
      * @link https://paystack.com/docs/api/customer#fetch
      */
-    public function get(string $email_or_code): array{
+    public function get(string $email_or_code): array
+    {
         return $this->client->get("customer/{$email_or_code}");
     }
 
     public function update(string $code, ?string $first_name = null, ?string $last_name = null, ?array $params = []): array
     {
         $url = "customer/{$code}";
-        if(empty($params)){
-            if(!empty($first_name)){
+        if(empty($params)) {
+            if(!empty($first_name)) {
                 $params['first_name'] = $first_name;
             }
-            if(!empty($last_name)){
+            if(!empty($last_name)) {
                 $params['last_name'] = $last_name;
             }
         }
@@ -100,10 +102,19 @@ class Customer
      * @return array
      * @link https://paystack.com/docs/api/customer#validate
      */
-    public function validate(string $code, string|array $first_name = null,string $middle_name = null, string $last_name = null, string $type = null, string $value = null, string $country = null,
-    string $bvn = null, string $bank_code = null, string $account_number=null): array
-    {
-        if(!is_array($first_name)){
+    public function validate(
+        string $code,
+        string|array $first_name = null,
+        string $middle_name = null,
+        string $last_name = null,
+        string $type = null,
+        string $value = null,
+        string $country = null,
+        string $bvn = null,
+        string $bank_code = null,
+        string $account_number=null
+    ): array {
+        if(!is_array($first_name)) {
             $params['first_name'] = $first_name;
             $params['middle_name'] = $middle_name;
             $params['last_name'] = $last_name;
@@ -113,7 +124,7 @@ class Customer
             $params['bvn'] = $bvn;
             $params['bank_code'] = $bank_code;
             $params['account_number'] = $account_number;
-        }else{
+        } else {
             $params = $first_name;
         }
         return $this->client->post("customer/{$code}/identification", $params);
@@ -139,7 +150,8 @@ class Customer
      * @param string $authorization_code Authorization code to be deactivated
      * @return array
      */
-    public function deactivateAuth(string $authorization_code): array{
+    public function deactivateAuth(string $authorization_code): array
+    {
         $params['authorization_code'] = $authorization_code;
         return $this->client->post("customer/deactivate_authorization", $params);
     }

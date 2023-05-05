@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Musheabdulhakim\Paystack;
+
 use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
 
 class Client implements PaystackClientInterface

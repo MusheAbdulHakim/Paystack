@@ -1,16 +1,18 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Musheabdulhakim\Paystack\Contracts;
 
-interface PaystackClientInterface {
-
-     /**
-     * Make Get Request to api endpoint.
-     *
-     * @param string $url
-     * @param array $query
-     * @return array
-     */
+interface PaystackClientInterface
+{
+    /**
+    * Make Get Request to api endpoint.
+    *
+    * @param string $url
+    * @param array $query
+    * @return array
+    */
     public function get(string $url, $query = []): array;
 
     /**
@@ -41,5 +43,3 @@ interface PaystackClientInterface {
     public function delete(string $url, $query = []): array;
 
 }
-
-

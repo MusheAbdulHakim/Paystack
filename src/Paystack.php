@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Musheabdulhakim\Paystack;
 
+use Musheabdulhakim\Paystack\Api\ApplePay;
 use Musheabdulhakim\Paystack\Api\Customer;
+use Musheabdulhakim\Paystack\Api\SubAccount;
 use Musheabdulhakim\Paystack\Api\Transaction;
+use Musheabdulhakim\Paystack\Api\VirtualAccount;
 use Musheabdulhakim\Paystack\Api\TransactionSplit;
 
 class Paystack
@@ -56,7 +59,7 @@ class Paystack
     {
         $this->config = new Config();
 
-        if($loadEnv){
+        if($loadEnv) {
             $dotenv = \Dotenv\Dotenv::createMutable(__DIR__ .'/..');
             $dotenv->safeLoad();
             if(!empty($_ENV['SECRET_KEY'])) {
@@ -180,7 +183,7 @@ class Paystack
         $secret = $this->SECRET_KEY;
         $url = $this->BASE_URL;
         $client = $this->config->get('client');
-        $this->client = (new $client($secret,$url));
+        $this->client = (new $client($secret, $url));
         return $this->client;
     }
 
@@ -230,9 +233,9 @@ class Paystack
      * The country from which to obtain the list of supported banks. e.g country=ghana or country=nigeria
      *
      * @param array $params
-     * @return void
+     * @return array
      */
-    public function banks(string $country = null, $params = [])
+    public function banks(string $country = null, $params = []): array
     {
         $params['country'] = $country;
         return $this->client->get('bank', $params);
@@ -309,6 +312,47 @@ class Paystack
             return (new Customer($this->client))->create($first_name, $last_name, $email, $phone, $metadata);
         } else {
             return (new Customer($this->client));
+        }
+    }
+
+    /**
+     * Initialize the VirtualAccount Class
+     *
+     * @return VirtualAccount
+     */
+    public function virtualAccount(): VirtualAccount
+    {
+        return (new VirtualAccount($this->client));
+    }
+
+    /**
+     * Initialize ApplePay class. Pass domainName to register a top-level domain.
+     *
+     * @param string|null $domainName
+     * @return array|\Musheabdulhakim\Paystack\Api\ApplePay
+     */
+    public function applePay(string $domainName = null): array|ApplePay
+    {
+        return !empty($domainName) ? (new ApplePay($this->client))->register($domainName) : (new ApplePay($this->client));
+    }
+
+    /**
+     * Initialize SubAccount class. You can also pass the parameters to create subaccount on init
+     *
+     * @param array $params
+     * @return array|\Musheabdulhakim\Paystack\Api\SubAccount
+     */
+    public function subAccount($params = []): array|SubAccount
+    {
+        if (!empty($params) && (count($params) > 0)) {
+            $business_name = $params['business_name'];
+            $settlement_bank = $params['settlement_bank'];
+            $account_number = $params['account_number'];
+            $percentage_charge = $params['percentage_charge'];
+            $description = $params['description'];
+            return (new SubAccount($this->client))->create($business_name, $settlement_bank, $account_number, $percentage_charge, $description);
+        } else {
+            return (new SubAccount($this->client));
         }
     }
 }

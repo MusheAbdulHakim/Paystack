@@ -6,7 +6,6 @@ namespace Musheabdulhakim\Paystack\Api;
 
 use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
 
-
 class Terminal
 {
     private $client;
