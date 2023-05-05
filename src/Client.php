@@ -31,7 +31,7 @@ class Client implements PaystackClientInterface
      * @param array $query
      * @return array
      */
-    public function get(string $url, array $query = []): array
+    public function get(string $url, $query = []): array
     {
         try {
             $response = $this->http->get($url, [
@@ -55,7 +55,7 @@ class Client implements PaystackClientInterface
      * @param array $query
      * @return array
      */
-    public function post(string $url, array $query = []): array
+    public function post(string $url, $query = []): array
     {
         try {
             $response = $this->http->post($url, [
@@ -79,7 +79,7 @@ class Client implements PaystackClientInterface
      * @param array $query
      * @return array
      */
-    public function put(string $url, array $query = []): array
+    public function put(string $url, $query = []): array
     {
         try {
             $response = $this->http->put($url, [
@@ -95,7 +95,30 @@ class Client implements PaystackClientInterface
         }
     }
 
-    public function curlPost(string $url, array $query = [])
+    /**
+     * Make DELETE Request to api endpoint
+     *
+     * @param string $url
+     * @param array $query
+     * @return array
+     */
+    public function delete(string $url, $query = []): array
+    {
+        try {
+            $response = $this->http->delete($url, [
+                'headers' => [
+                    'Authorization' => "Bearer {$this->secret_key}",
+                    'Cache-Control' => "no-cache"
+                ],
+                'form_params' => $query,
+            ]);
+            return json_decode($response->getBody()->getContents(), true);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            return array($e->getMessage());
+        }
+    }
+
+    public function curlPost(string $url, $query = [])
     {
         $url = $this->base_url.'/'.$url;
         if((substr($this->base_url, -1) === '/')) {
