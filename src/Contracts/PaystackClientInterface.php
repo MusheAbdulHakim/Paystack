@@ -11,7 +11,7 @@ interface PaystackClientInterface {
      * @param array $query
      * @return array
      */
-    public function get(string $url, array $query = []): array;
+    public function get(string $url, $query = []): array;
 
     /**
      * Make Post Request to api endpoint
@@ -20,7 +20,7 @@ interface PaystackClientInterface {
      * @param array $query
      * @return array
      */
-    public function post(string $url, array $query = []): array;
+    public function post(string $url, $query = []): array;
 
     /**
      * Make PUT Request to api endpoint
@@ -29,7 +29,10 @@ interface PaystackClientInterface {
      * @param array $query
      * @return array
      */
-    public function put(string $url, array $query = []): array;
+    public function put(string $url, $query = []): array;
+
+
+    public function delete(string $url, $query = []): array;
 
 }
 
