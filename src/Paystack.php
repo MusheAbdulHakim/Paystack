@@ -10,6 +10,8 @@ use Musheabdulhakim\Paystack\Api\SubAccount;
 use Musheabdulhakim\Paystack\Api\Transaction;
 use Musheabdulhakim\Paystack\Api\VirtualAccount;
 use Musheabdulhakim\Paystack\Api\TransactionSplit;
+use Musheabdulhakim\Paystack\Api\Transfer;
+use Musheabdulhakim\Paystack\Api\TransferRecipient;
 
 class Paystack
 {
@@ -345,14 +347,50 @@ class Paystack
     public function subAccount($params = []): array|SubAccount
     {
         if (!empty($params) && (count($params) > 0)) {
-            $business_name = $params['business_name'];
-            $settlement_bank = $params['settlement_bank'];
-            $account_number = $params['account_number'];
-            $percentage_charge = $params['percentage_charge'];
-            $description = $params['description'];
+            $business_name = $params['business_name'] ?? null;
+            $settlement_bank = $params['settlement_bank'] ?? null;
+            $account_number = $params['account_number'] ?? null;
+            $percentage_charge = $params['percentage_charge'] ?? null;
+            $description = $params['description'] ?? null;
             return (new SubAccount($this->client))->create($business_name, $settlement_bank, $account_number, $percentage_charge, $description);
         } else {
             return (new SubAccount($this->client));
+        }
+    }
+
+    /**
+     * Intialize TransferRecipient Class or pass the parameters to create transfer recipient.
+     *
+     * @param array $params
+     * @return array|TransferRecipient
+     */
+    public function transferRecipient($params = []): array|TransferRecipient
+    {
+        if(!empty($params) && count($params) > 0){
+            $type = $params['type'] ?? null;
+            $name = $params['name'] ?? null;
+            $account_number = $params['account_number'] ?? null;
+            $bank_code = $params['bank_code'] ?? null;
+            $currency = $params['currency'] ?? null;
+            return (new TransferRecipient($this->client))->create($type, $name,$account_number, $bank_code, $currency);
+        }
+        return (new TransferRecipient($this->client));
+    }
+
+    /**
+     * Intialize Transfer Class or quickly initialize transfer by passing the parameters.
+     *
+     * @param integer|null $amount
+     * @param string|null $recipient
+     * @param string|null $currency
+     * @return array|Transfer
+     */
+    public function transfer(int $amount = null, string $recipient = null, string $currency = null): array|Transfer
+    {
+        if(!empty($amount) && !empty($recipient)){
+            return (new Transfer($this->client))->init($amount,$recipient, $currency);
+        }else{
+            return (new Transfer($this->client));
         }
     }
 }
