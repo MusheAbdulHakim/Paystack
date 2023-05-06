@@ -22,7 +22,6 @@ class Transfer
      * Send money to your customers.
      * Status of transfer object returned will be pending if OTP is disabled. In the event that an OTP is required, status will read otp.
      *
-     * @param string $source Where should we transfer from? Only balance for now
      * @param integer $amount Amount to transfer in kobo if currency is NGN and pesewas if currency is GHS.
      * @param string $recipient Code for transfer recipient
      * @param string $currency Specify the currency of the transfer. Defaults to NGN
@@ -30,12 +29,26 @@ class Transfer
      * @return array
      * @link https://paystack.com/docs/api/transfer#initiate
      */
-    public function init(string $source = "balance", int $amount, string $recipient, string $currency = "NGN", $params = []): array
+    public function init(int $amount, string $recipient, string $currency = null, $params = []): array
     {
-        $params['source'] = $source;
         $params['amount'] = $amount;
         $params['recipient'] = $recipient;
-        $params['currency'] = $currency;
+        $params['source'] = "balance";
+        $params['currency'] = $currency ?? "NGN";
+        return $this->client->post("transfer", $params);
+
+    }
+
+    /**
+     * Send money to your customers.
+     * Status of transfer object returned will be pending if OTP is disabled. In the event that an OTP is required, status will read otp.
+     *
+     * @param array $params Request parameters. Refer to the docs
+     * @return array
+     * @link https://paystack.com/docs/api/transfer#initiate
+     */
+    public function initialize($params = []): array
+    {
         return $this->client->post("transfer", $params);
 
     }
@@ -59,17 +72,17 @@ class Transfer
      * Batch multiple transfers in a single request.
      * You need to disable the Transfers OTP requirement to use this endpoint.
      *
+     * @param array $transfers A list of transfer object. Each object should contain amount, recipient, and reference
      * @param string $source Where should we transfer from? Only balance for now
      * @param string $currency Specify the currency of the transfer. Defaults to NGN
-     * @param array $transfers A list of transfer object. Each object should contain amount, recipient, and reference
      * @return array
      * @link https://paystack.com/docs/api/transfer#bulk
      */
-    public function bulk(string $source = "balance", string $currency = "NGN", array $transfers): array
+    public function bulk(array $transfers, string $source = null, string $currency = null): array
     {
-        $params['source'] = $source;
-        $params['currency'] = $currency;
         $params['transfers'] = $transfers;
+        $params['source'] = $source ?? "balance";
+        $params['currency'] = $currency ?? "NGN";
         return $this->client->post("transfer/bulk", $params);
     }
 
