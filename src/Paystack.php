@@ -6,6 +6,8 @@ namespace Musheabdulhakim\Paystack;
 
 use Musheabdulhakim\Paystack\Api\ApplePay;
 use Musheabdulhakim\Paystack\Api\Customer;
+use Musheabdulhakim\Paystack\Api\Dispute;
+use Musheabdulhakim\Paystack\Api\Miscellaneous;
 use Musheabdulhakim\Paystack\Api\SubAccount;
 use Musheabdulhakim\Paystack\Api\Transaction;
 use Musheabdulhakim\Paystack\Api\VirtualAccount;
@@ -392,5 +394,20 @@ class Paystack
         }else{
             return (new Transfer($this->client));
         }
+    }
+
+    public function dispute()
+    {
+        return (new Dispute($this->client));
+    }
+
+    public function misc(): Miscellaneous
+    {
+        return (new Miscellaneous($this->client));
+    }
+
+    public function miscellaneous(): Miscellaneous
+    {
+        return (new Miscellaneous($this->client));
     }
 }
