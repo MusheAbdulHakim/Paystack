@@ -17,3 +17,4 @@ ehthumbs.db
 Thumbs.db
 .env
 *.cache
+composer.lock
