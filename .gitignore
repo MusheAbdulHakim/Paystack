@@ -17,4 +17,4 @@ ehthumbs.db
 Thumbs.db
 .env
 *.cache
-
+phpunit.xml

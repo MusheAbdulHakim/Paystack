@@ -1,6 +1,6 @@
 {
   "name": "musheabdulhakim/paystack",
-  "description": "Paystack is a library for working with paystack payment gateway.",
+  "description": "PHP & Laravel package, that makes working with Paystack api a breeze.",
   "license": "MIT",
   "keywords": [
     "php",
@@ -45,9 +45,6 @@
     "test": "phpunit"
   },
   "extra": {
-    "branch-alias": {
-      "dev-master": "1.x-dev"
-    },
     "laravel": {
       "providers": [
         "Musheabdulhakim\\Paystack\\ServiceProviders\\PaystackServiceProvider"
@@ -57,5 +54,5 @@
       }
     }
   },
-  "minimum-stability": "stable"
+  "minimum-stability": "dev"
 }
