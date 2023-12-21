@@ -73,6 +73,8 @@
     ``` php
     require_once __DIR__ . "/vendor/autoload.php";
     ```
+<a name="Usage"></a>
+## Usage
 
 ## Initialize Paystack 
 1. Using ``.env`` file, set the values of your keys
@@ -92,7 +94,7 @@
     ```
 
 
-2. If you don't want to use .env file, you can set the values by passing them to the initialized class. 
+2. If you don't want to use .env file, you can set the values by passing it to the initialized class. 
     ```php
         <?php
 
@@ -106,9 +108,165 @@
             'MERCHANT_EMAIL' => 'test@example.com'
         ]);
     ```
+<a name="Transaction"></a>
+### Transaction
+
+### [Initialize Transaction](https://paystack.com/docs/api/transaction/#initialize)
+
+```
+$transaction = $paystack->transaction(
+    $email, 
+    $amount, 
+    [
+        // optional parameters
+    ]
+);
+
+//or
+
+$transaction = $paystack->transaction('test@transaction.com','1000');
+
+//or
+
+$transaction = $paystack->transaction('test@transaction.com','1000',[
+    // optional parameters
+]);
+
+//or
+
+$paystack->transaction->init(
+    $email, 
+    $amount, 
+    [
+        // optional parameters
+    ]
+);
+
+//or
+
+$params = [
+    'email' => "customer@email.com",
+    'amount' => "20000",
+    'split_code' => 'SPL_98WF13Eb3w'
+];
+$paystack->transaction->initialize($params);
+```
+
+<a name="Verify Transaction"></a>
+### Verify Transaction
+
+### [Verify Transaction](https://paystack.com/docs/api/transaction/#verify)
+
+```
+$transaction = $paystack->transaction->verify('1vl0abs51p');
+$transaction = $paystack->transaction()->verify('1vs0ars51p');
+
+//check the status of the transaction
+$transaction_status = $paystack->transaction->verify('1vl0abs51p')["status"];
+```
+
+<a name="List Transaction"></a>
+### List Transaction
+
+### [List Transaction](https://paystack.com/docs/api/transaction/#list)
+
+```
+
+$transactions = $paystack->transaction->list();
+//or 
+$transaction = $paystack->transaction()->list();
+
+//pass optional parameters to the list method
+$params = [
+    'page' => '',
+    'customer' => '',
+    'terminalid' => ''
+];
+$transactions = $paystack->transaction->list($params);
+```
+
+<a name="Fetch Transaction"></a>
+### Fetch Transaction
+
+### [Fetch Transaction](https://paystack.com/docs/api/transaction/#fetch)
+
+```
+
+$transaction = $paystack->transaction->fetch(2745284445);
+//or 
+$transaction = $paystack->transaction()->fetch(2745284445);
+
+```
+
+<a name="Charge Authorization"></a>
+### Charge Authorization
+
+### [Charge Authorization](https://paystack.com/docs/api/transaction/#charge-authorization)
+
+```
+$params = [
+    //optional parameters
+];
+$transaction = $paystack->transaction->chargeAuth('test@gmail.com','10000','AUTH_ir6emhfrpk',$params);
 
 
+```
 
+<a name="View Transaction Timeline"></a>
+### View Transaction Timeline
+
+
+### [View Transaction Timeline](https://paystack.com/docs/api/transaction/#view-timeline)
+
+```
+
+$transaction_timeline = $paystack->transaction->timeline('1vl0abs51p');
+
+```
+
+<a name="Transaction Totals"></a>
+### Transaction Totals
+
+
+### [Transaction Totals](https://paystack.com/docs/api/transaction/#totals)
+
+```
+$params [
+    // Your query parameters
+];
+
+$transation_total = $paystack->transaction->total($params);
+
+```
+
+<a name="Export Transaction"></a>
+### Export Transactions
+
+### [Export Transactions](https://paystack.com/docs/api/transaction/#export)
+
+```
+$params [
+    // Your query parameters
+];
+
+$export = $paystack->transaction->export($params);
+
+```
+
+
+<a name="Partial Debit"></a>
+### Partial Debit
+
+### [Partial Debit](https://paystack.com/docs/api/transaction/#partial-debit)
+
+```
+$params [
+    // Your query parameters
+];
+
+$trans = $paystack->transaction->partialDebit($authorization_code, $currency, $amount, $email, $params);
+
+```
 
 
 <a name="Customization"></a>
@@ -122,7 +280,7 @@
 To run the tests, run the following command from the project folder.
 
 ``` bash
-$ ./vendor/bin/phpunit
+ ./vendor/bin/phpunit
 ```
 
 
