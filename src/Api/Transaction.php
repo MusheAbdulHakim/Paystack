@@ -35,6 +35,17 @@ class Transaction
     }
 
     /**
+     * Initialize a transaction
+     *
+     * @param array $params
+     * @return array
+     */
+    public function initialize(array $params): array
+    {
+        return $this->client->post('transaction/initialize', $params);
+    }
+
+    /**
      * List transactions carried out on your integration.
      *
      * @link https://paystack.com/docs/api/#transaction-list
