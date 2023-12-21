@@ -48,7 +48,7 @@ class Transaction
     /**
      * List transactions carried out on your integration.
      *
-     * @link https://paystack.com/docs/api/#transaction-list
+     * @link https://paystack.com/docs/api/transaction/#list
      *
      * @param array $params
      * @return array
@@ -61,7 +61,7 @@ class Transaction
     /**
      * Verify Transaction
      *
-     * @link https://paystack.com/docs/api/#transaction-verify
+     * @link https://paystack.com/docs/api/transaction/#verify
      * @param string $reference
      * @return array
      */
@@ -74,7 +74,7 @@ class Transaction
     /**
      * Get details of a transaction carried out on your integration.
      *
-     * @link https://paystack.com/docs/api/#transaction-fetch
+     * @link https://paystack.com/docs/api/transaction/#fetch
      * @param integer $id .An ID for the transaction to fetch
      * @return array
      */
@@ -147,7 +147,7 @@ class Transaction
     /**
      * View the timeline of a transaction
      *
-     * @link https://paystack.com/docs/api/#transaction-view-timeline
+     * @link https://paystack.com/docs/api/transaction/#view-timeline
      * @param string $id_or_reference .The ID or the reference of the transaction
      * @return array
      */
@@ -159,7 +159,7 @@ class Transaction
     /**
      * Total amount received on your account
      *
-     * @link https://paystack.com/docs/api/#transaction-totals
+     * @link https://paystack.com/docs/api/transaction/#totals
      * @param array $params
      * @return array
      */
@@ -171,7 +171,7 @@ class Transaction
     /**
      * List transactions carried out on your integration.
      *
-     * @link https://paystack.com/docs/api/#transaction-export
+     * @link https://paystack.com/docs/api/transaction/#export
      * @param array $params
      * @return array
      */
@@ -189,7 +189,7 @@ class Transaction
       * @param string $amount Amount should be in kobo if currency is NGN, pesewas, if currency is GHS, and cents, if currency is ZAR
       * @param string $email Customer's email address (attached to the authorization code)
       * @param array $params
-      * @link https://paystack.com/docs/api/#transaction-partial-debit
+      * @link https://paystack.com/docs/api/transaction/#partial-debit
       * @return array
       */
     public function partialDebit(string $authorization_code, string $currency, string $amount, string $email, $params = []): array
