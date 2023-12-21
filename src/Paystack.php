@@ -19,6 +19,8 @@ class Paystack
 {
     private $config;
 
+    public $transaction;
+    
     private $client;
 
     /**
@@ -105,6 +107,8 @@ class Paystack
         }
 
         $this->client = $this->client();
+
+        $this->transaction = $this->transaction();
     }
 
     /**
