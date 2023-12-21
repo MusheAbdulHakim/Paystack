@@ -231,7 +231,7 @@ $transaction_timeline = $paystack->transaction->timeline('1vl0abs51p');
 ### [Transaction Totals](https://paystack.com/docs/api/transaction/#totals)
 
 ```
-$params [
+$params = [
     // Your query parameters
 ];
 
@@ -245,7 +245,7 @@ $transation_total = $paystack->transaction->total($params);
 ### [Export Transactions](https://paystack.com/docs/api/transaction/#export)
 
 ```
-$params [
+$params = [
     // Your query parameters
 ];
 
@@ -260,7 +260,7 @@ $export = $paystack->transaction->export($params);
 ### [Partial Debit](https://paystack.com/docs/api/transaction/#partial-debit)
 
 ```
-$params [
+$params = [
     // Your query parameters
 ];
 
