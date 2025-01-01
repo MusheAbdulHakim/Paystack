@@ -1,10 +1,17 @@
 <?php
 
-namespace Musheabdulhakim\Paystack;
+declare(strict_types=1);
+
+namespace MusheAbdulHakim\Paystack;
 
 use Illuminate\Config\Repository;
-use Musheabdulhakim\Paystack\Exceptions\ConfigFileNotFoundException;
+use MusheAbdulHakim\Paystack\Exceptions\ConfigFileNotFoundException;
 
+/**
+ * Class Config
+ *
+ * @author  Mushe Abdul-Hakim  <musheabdulhakim99@gmail.com>
+ */
 class Config
 {
     /**
@@ -12,16 +19,10 @@ class Config
      */
     public const CONFIG_FILE_NAME = "paystack";
 
-    /**
-     * @var  \Illuminate\Config\Repository
-     */
-    private $config;
 
-    /**
-     * Config constructor.
-     *
-     * @param \Illuminate\Config\Repository $config
-     */
+    private readonly Repository $config;
+
+
     public function __construct()
     {
         $configPath = $this->configurationPath();
@@ -48,24 +49,18 @@ class Config
         // check if this laravel specific function `config_path()` exist (means this package is used inside
         // a laravel framework). If so then load then try to load the laravel config file if it exist.
         if (function_exists('config_path')) {
-            $config_path = config_path();
+            $file = config_path() . '/' . self::CONFIG_FILE_NAME . '.php';
+            if (file_exists($file)) {
+                $config_path = config_path();
+            }
         }
 
         return $config_path;
     }
 
-    /**
-     * @param $key
-     *
-     * @return  mixed
-     */
-    public function get($key)
+
+    public function get(mixed $key): string
     {
         return $this->config->get($key);
-    }
-
-    public function set($key, $value)
-    {
-        return $this->config->set($key, $value);
     }
 }
