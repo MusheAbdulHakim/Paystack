@@ -9,6 +9,7 @@ use MusheAbdulHakim\Paystack\Api\Customer;
 use MusheAbdulHakim\Paystack\Api\Terminal;
 use MusheAbdulHakim\Paystack\Api\Transaction;
 use MusheAbdulHakim\Paystack\Api\TransactionSplit;
+use MusheAbdulHakim\Paystack\Api\VirtualAccount;
 use MusheAbdulHakim\Paystack\Contracts\PaystackClientInterface;
 use MusheAbdulHakim\Paystack\Contracts\TransporterContract;
 
@@ -42,5 +43,9 @@ final readonly class Client implements PaystackClientInterface
         return new Customer($this->transporter);
     }
 
+    public function virtualAccount(): VirtualAccount
+    {
+        return new VirtualAccount($this->transporter);
+    }
 
 }
