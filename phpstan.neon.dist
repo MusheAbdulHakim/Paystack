@@ -3,6 +3,7 @@ parameters:
     paths:
         - src
     ignoreErrors: 
+        - identifier: class.nameCase
     excludePaths: 
         - ./src/ServiceProviders
         - ./src/Config.php
