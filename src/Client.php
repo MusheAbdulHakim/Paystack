@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MusheAbdulHakim\Paystack;
 
+use MusheAbdulHakim\Paystack\Api\ApplePay;
 use MusheAbdulHakim\Paystack\Api\Customer;
 use MusheAbdulHakim\Paystack\Api\Terminal;
 use MusheAbdulHakim\Paystack\Api\Transaction;
@@ -46,6 +47,12 @@ final readonly class Client implements PaystackClientInterface
     public function virtualAccount(): VirtualAccount
     {
         return new VirtualAccount($this->transporter);
+    }
+
+
+    public function applePay(): ApplePay
+    {
+        return new ApplePay($this->transporter);
     }
 
 }
