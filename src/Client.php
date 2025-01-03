@@ -8,6 +8,7 @@ namespace MusheAbdulHakim\Paystack;
 use MusheAbdulHakim\Paystack\Api\ApplePay;
 use MusheAbdulHakim\Paystack\Api\Customer;
 use MusheAbdulHakim\Paystack\Api\Plan;
+use MusheAbdulHakim\Paystack\Api\Product;
 use MusheAbdulHakim\Paystack\Api\SubAccount;
 use MusheAbdulHakim\Paystack\Api\Subscription;
 use MusheAbdulHakim\Paystack\Api\Terminal;
@@ -71,6 +72,11 @@ final readonly class Client implements PaystackClientInterface
     public function subscription(): Subscription
     {
         return new Subscription($this->transporter);
+    }
+
+    public function product(): Product
+    {
+        return new Product($this->transporter);
     }
 
 }
