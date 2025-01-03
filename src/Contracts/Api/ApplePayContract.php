@@ -6,7 +6,6 @@ interface ApplePayContract
 {
     /**
      * Register Domain
-     * @param string $domain
      * @return array<mixed>|string
      */
     public function register(string $domain): array|string;
@@ -19,7 +18,6 @@ interface ApplePayContract
     public function list(array $params = []): array|string;
     /**
      * Unregister Domain
-     * @param string $domain
      * @return array<mixed>|string
      */
     public function unregister(string $domain): array|string;
