@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack;
+namespace MusheAbdulHakim\Paystack;
 
 class Paystack
 {

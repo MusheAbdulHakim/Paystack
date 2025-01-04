@@ -160,11 +160,9 @@ final class Factory
 
         $config = new Config();
 
-        if ($this->secretKey !== null) {
-            $headers = Headers::withAuthorization(ApiKey::from(
-                $this->baseUri !== null && $this->baseUri !== '' && $this->baseUri !== '0' ? $this->baseUri : $config->get('PAYSTACK_SECRET_KEY')
-            ));
-        }
+        $headers = Headers::withAuthorization(ApiKey::from(
+            $this->secretKey !== null && $this->secretKey !== '' && $this->secretKey !== '0' ? $this->secretKey : $config->get('PAYSTACK_SECRET_KEY')
+        ));
 
         foreach ($this->headers as $name => $value) {
             $headers = $headers->withCustomHeader($name, $value);
@@ -173,7 +171,6 @@ final class Factory
         $baseUri = BaseUri::from(
             $this->baseUri !== null && $this->baseUri !== '' && $this->baseUri !== '0' ? $this->baseUri : $config->get('PAYSTACK_API_URI'),
         );
-
 
         $queryParams = QueryParams::create();
         foreach ($this->queryParams as $name => $value) {
