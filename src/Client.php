@@ -11,6 +11,7 @@ use MusheAbdulHakim\Paystack\Api\PaymentPage;
 use MusheAbdulHakim\Paystack\Api\PaymentRequest;
 use MusheAbdulHakim\Paystack\Api\Plan;
 use MusheAbdulHakim\Paystack\Api\Product;
+use MusheAbdulHakim\Paystack\Api\Settlement;
 use MusheAbdulHakim\Paystack\Api\SubAccount;
 use MusheAbdulHakim\Paystack\Api\Subscription;
 use MusheAbdulHakim\Paystack\Api\Terminal;
@@ -89,6 +90,11 @@ final readonly class Client implements PaystackClientInterface
     public function paymentRequest(): PaymentRequest
     {
         return new PaymentRequest($this->transporter);
+    }
+
+    public function settlement(): Settlement
+    {
+        return new Settlement($this->transporter);
     }
 
 }
