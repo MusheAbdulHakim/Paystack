@@ -8,6 +8,7 @@ namespace MusheAbdulHakim\Paystack;
 use MusheAbdulHakim\Paystack\Api\Plan;
 use MusheAbdulHakim\Paystack\Api\Product;
 use MusheAbdulHakim\Paystack\Api\ApplePay;
+use MusheAbdulHakim\Paystack\Api\BulkCharge;
 use MusheAbdulHakim\Paystack\Api\Customer;
 use MusheAbdulHakim\Paystack\Api\Terminal;
 use MusheAbdulHakim\Paystack\Api\Transfer;
@@ -114,6 +115,11 @@ final readonly class Client implements PaystackClientInterface
     public function transferControl(): TransferControl
     {
         return new TransferControl($this->transporter);
+    }
+
+    public function bulkCharge(): BulkCharge
+    {
+        return new BulkCharge($this->transporter);
     }
 
 }
