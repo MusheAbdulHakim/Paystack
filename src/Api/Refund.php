@@ -1,58 +1,38 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\Contracts\Api\RefundContract;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
 
-/**
- * The Refunds API allows you create and manage transaction refunds.
- * @link https://paystack.com/docs/api/refund#refunds
- */
-class Refund
+final class Refund implements RefundContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
-    {
-        $this->client = $client;
-    }
 
-    /**
-     * Initiate a refund on your integration
-     *
-     * @param string $transaction Transaction reference or id
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/refund#create
-     */
-    public function create(string $transaction, $params = []): array
+    public function create(string $transaction, array $params = []): array|string
     {
         $params['transaction'] = $transaction;
-        return $this->client->post("refund", $params);
+        $payload = Payload::post("refund", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List refunds available on your integration.
-     *
-     * @param array $params Query parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/refund#list
-     */
-    public function list($params = []): array
+
+    public function list(string $transaction, array $params = []): array|string
     {
-        return $this->client->get("refund", $params);
+        $params['transaction'] = $transaction;
+        $payload = Payload::get("refund", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Get details of a refund on your integration.
-     *
-     * @param string $reference Identifier for transaction to be refunded
-     * @return array
-     * @link https://paystack.com/docs/api/refund#fetch
-     */
-    public function fetch(string $reference): array
+    public function fetch(string $id): array|string
     {
-        return $this->client->get("refund/{$reference}");
+
+        $payload = Payload::get("refund/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
+
 }

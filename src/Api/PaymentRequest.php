@@ -2,138 +2,69 @@
 
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
+use MusheAbdulHakim\Paystack\Contracts\Api\PaymentRequestContract;
 
-/**
- * The Payment Requests API allows you manage requests for payment of goods and services.
- * @link https://paystack.com/docs/api/payment-request#payment-requests
- */
-class PaymentRequest
+final class PaymentRequest implements PaymentRequestContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function create(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("paymentrequest", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Create a payment request for a transaction on your integration
-     *
-     * @param string $customer Customer id or code
-     * @param integer $amount Payment request amount. It should be used when line items and tax values aren't specified.
-     * @param array $params Optional paramters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#create
-     */
-    public function create(string $customer, int $amount, $params = []): array
+    public function list(array $params = []): array|string
     {
-        $params['customer'] = $customer;
-        $params['amount'] = $amount;
-        return $this->client->post('paymentrequest', $params);
+        $payload = Payload::get("paymentrequest", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List the payment requests available on your integration.
-     *
-     * @param array $params Query paramters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#list
-     */
-    public function list($params = []): array
+    public function fetch(string $id): array|string
     {
-        return $this->client->get('paymentrequest', $params);
+        $payload = Payload::get("paymentrequest/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * paymentrequest/:id_or_code
-     *
-     * @param string $id_or_code The payment request ID or code you want to fetch
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#fetch
-     */
-    public function fetch(string $id_or_code): array
+    public function verify(string $code): array|string
     {
-        return $this->client->get("paymentrequest/{$id_or_code}");
+        $payload = Payload::get("paymentrequest/verify/$code");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Verify details of a payment request on your integration.
-     *
-     * @param string $code Payment Request code
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#verify
-     */
-    public function verify(string $code): array
+    public function notify(string $code): array|string
     {
-        return $this->client->get("paymentrequest/verify/{$code}");
+        $payload = Payload::post("paymentrequest/notify/$code");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Send notification of a payment request to your customers
-     *
-     * @param string $code Payment Request code
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#send-notification
-     */
-    public function notify(string $code): array
+    public function total(): array|string
     {
-        return $this->client->post("paymentrequest/notify/{$code}");
+        $payload = Payload::get("paymentrequest/totals");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Get payment requests metric
-     *
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#total
-     */
-    public function total(): array
+    public function finalize(string $code, bool $sendNotification): array|string
     {
-        return $this->client->get("paymentrequest/totals");
+        $params['send_notification'] = $sendNotification;
+        $payload = Payload::post("paymentrequest/finalize/$code", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Finalize a draft payment request
-     *
-     * @param string $code Payment Request code
-     * @param boolean $send_notification Indicates whether Paystack sends an email notification to customer. Defaults to true
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#finalize
-     */
-    public function finalize(string $code, bool $send_notification): array
+    public function update(string $id, array $params = []): array|string
     {
-        $params['send_notification'] = $send_notification;
-        return $this->client->post("paymentrequest/finalize/{$code}", $params);
+        $payload = Payload::post("paymentrequest/$id", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Update a payment request details on your integration
-     *
-     * @param string $id_or_code Payment Request ID or slug
-     * @param string $customer Customer id or code
-     * @param integer $amount Payment request amount. Only useful if line items and tax values are ignored. endpoint will throw a friendly warning if neither is available.
-     * @param array $params Optional paramters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#update
-     */
-    public function update(string $id_or_code, string $customer, int $amount, $params = []): array
+    public function archive(string $code): array|string
     {
-        $params['customer'] = $customer;
-        $params['amount'] = $amount;
-        return $this->client->put("paymentrequest/{$id_or_code}", $params);
+        $payload = Payload::post("paymentrequest/archive/$code");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Used to archive a payment request. A payment request will no longer be fetched on list or returned on verify.
-     *
-     * @param string $code Payment Request code
-     * @return array
-     * @link https://paystack.com/docs/api/payment-request#archive
-     */
-    public function archive(string $code): array
-    {
-        return $this->client->post("paymentrequest/archive/{$code}");
-    }
 }

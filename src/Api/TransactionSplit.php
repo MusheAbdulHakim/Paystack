@@ -1,122 +1,48 @@
 <?php
 
-declare(strict_types=1);
+namespace MusheAbdulHakim\Paystack\Api;
 
-namespace Musheabdulhakim\Paystack\Api;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
+use MusheAbdulHakim\Paystack\Contracts\Api\TransactionSplitContract;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
-
-/**
- * The Transaction Splits API enables merchants split the settlement for a transaction across their payout account, and one or more Subaccounts.
- * @link https://paystack.com/docs/api/#split
- */
-class TransactionSplit
+final class TransactionSplit implements TransactionSplitContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function create(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("split", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Create a split payment on your integration
-     *
-     * @param string $name Name of the transaction split
-     * @param string $type The type of transaction split you want to create. You can use one of the following: percentage | flat
-     * @param string $currency The type of transaction split you want to create. You can use one of the following: percentage | flat
-     * @param array $subaccounts A list of object containing subaccount code and number of shares: [{subaccount: ‘ACT_xxxxxxxxxx’, share: xxx},{...}]
-     * @param string $bearer_type Any of subaccount | account | all-proportional | all
-     * @param string $bearer_subaccount Subaccount code
-     * @link https://paystack.com/docs/api/split#create
-     * @return array
-     */
-    public function create(string $name, string $type, string $currency, string $bearer_type, string $bearer_subaccount, $subaccounts = []): array
+    public function list(array $params = []): array|string
     {
-        $params['name'] = $name;
-        $params['type'] = $type;
-        $params['currency'] = $currency;
-        $params['subaccounts'] = $subaccounts;
-        $params['bearer_type'] = $bearer_type;
-        $params['bearer_subaccount'] = $bearer_subaccount;
-        return $this->client->post('split', $params);
+        $payload = Payload::get("split", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * List the transaction splits available on your integration
-     *
-     * @param array|null $params Query Parameters
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/split#list
-     */
-    public function list(?array $params = []): array
+    public function fetch(string $reference): array|string
     {
-        return $this->client->get('split', $params);
+        $payload = Payload::get("split/$reference");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Get details of a split on your integration.
-     *
-     * @param string $id Split Id
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/split#fetch
-     */
-    public function fetch(string $id): array
+    public function update(string $id, array $params = []): array|string
     {
-        $url = "split/{$id}";
-        return $this->client->get($url);
+        $payload = Payload::put("split/$id", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * Update a transaction split details on your integration
-     *
-     * @param string $id Split Id
-     * @param array $params
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/split#update
-     */
-    public function update(string $id, $params = []): array
+    public function addSubAccount(string $id, array $params = []): array|string
     {
-        $url = "split/{$id}";
-        return $this->client->put($url, $params);
+        $payload = Payload::post("split/$id/subaccount/add", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * Add a Subaccount to a Transaction Split, or update the share of an existing Subaccount in a Transaction Split
-     *
-     * @param string $id Split Id
-     * @param string $subaccount This is the sub account code
-     * @param integer $share This is the transaction share for the subaccount
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/split#add-subaccount
-     */
-    public function add(string $id, string $subaccount, int $share): array
+    public function removeSubAccount(string $id, array $params = []): array|string
     {
-        $url = "split/{$id}/subaccount/add";
-        $params['subaccount'] = $subaccount;
-        $params['share'] = $share;
-        return $this->client->post($url, $params);
-    }
-
-    /**
-     * Remove a subaccount from a transacton split
-     *
-     * @param string $id Split Id
-     * @param string $subaccount This is the sub account code
-     * @return array
-     * @url https://paystack.com/docs/api/split#remove-subaccount
-     */
-    public function remove(string $id, string $subaccount): array
-    {
-        $url = "split/{$id}/subaccount/remove";
-        $params['subaccount'] = $subaccount;
-        return $this->client->post($url, $params);
+        $payload = Payload::post("split/$id/subaccount/remove", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 }

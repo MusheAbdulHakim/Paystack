@@ -1,125 +1,55 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\Contracts\Api\TransferContract;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
 
-/**
- * The Transfers API allows you automate sending money to your customers.
- * @link https://paystack.com/docs/api/transfer#transfers
- */
-class Transfer
+final class Transfer implements TransferContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function init(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("transfer", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Send money to your customers.
-     * Status of transfer object returned will be pending if OTP is disabled. In the event that an OTP is required, status will read otp.
-     *
-     * @param integer $amount Amount to transfer in kobo if currency is NGN and pesewas if currency is GHS.
-     * @param string $recipient Code for transfer recipient
-     * @param string $currency Specify the currency of the transfer. Defaults to NGN
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/transfer#initiate
-     */
-    public function init(int $amount, string $recipient, string $currency = null, $params = []): array
+    public function finalize(string $code, string $otp): array|string
     {
-        $params['amount'] = $amount;
-        $params['recipient'] = $recipient;
-        $params['source'] = "balance";
-        $params['currency'] = $currency ?? "NGN";
-        return $this->client->post("transfer", $params);
 
-    }
-
-    /**
-     * Send money to your customers.
-     * Status of transfer object returned will be pending if OTP is disabled. In the event that an OTP is required, status will read otp.
-     *
-     * @param array $params Request parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/transfer#initiate
-     */
-    public function initialize($params = []): array
-    {
-        return $this->client->post("transfer", $params);
-
-    }
-
-    /**
-     * Finalize an initiated transfer
-     *
-     * @param string $transfer_code The transfer code you want to finalize
-     * @param string $otp OTP sent to business phone to verify transfer
-     * @return array
-     * @link https://paystack.com/docs/api/transfer#finalize
-     */
-    public function finalize(string $transfer_code, string $otp): array
-    {
-        $params['transfer_code'] = $transfer_code;
+        $params['transfer_code'] = $code;
         $params['otp'] = $otp;
-        return $this->client->post("transfer/finalize_transfer", $params);
+        $payload = Payload::post("transfer/finalize_transfer", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Batch multiple transfers in a single request.
-     * You need to disable the Transfers OTP requirement to use this endpoint.
-     *
-     * @param array $transfers A list of transfer object. Each object should contain amount, recipient, and reference
-     * @param string $source Where should we transfer from? Only balance for now
-     * @param string $currency Specify the currency of the transfer. Defaults to NGN
-     * @return array
-     * @link https://paystack.com/docs/api/transfer#bulk
-     */
-    public function bulk(array $transfers, string $source = null, string $currency = null): array
+    public function bulk(string $source, array $transfers = []): array|string
     {
+        $params['source'] = $source;
         $params['transfers'] = $transfers;
-        $params['source'] = $source ?? "balance";
-        $params['currency'] = $currency ?? "NGN";
-        return $this->client->post("transfer/bulk", $params);
+        $payload = Payload::post("transfer/bulk", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List the transfers made on your integration.
-     *
-     * @param array $params Query parameters
-     * @return array
-     * @link https://paystack.com/docs/api/transfer#list
-     */
-    public function list($params = []): array
+    public function list(array $params = []): array|string
     {
-        return $this->client->get("transfer", $params);
+        $payload = Payload::get("transfer", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Get details of a transfer on your integration.
-     *
-     * @param string $id_or_code The transfer ID or code you want to fetch
-     * @return array
-     * @link https://paystack.com/docs/api/transfer#fetch
-     */
-    public function fetch(string $id_or_code): array
+    public function fetch(string $id): array|string
     {
-        return $this->client->get("transfer/{$id_or_code}");
+        $payload = Payload::get("transfer/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Verify the status of a transfer on your integration.
-     *
-     * @param string $reference Transfer reference
-     * @return array
-     * @link https://paystack.com/docs/api/transfer#verify
-     */
-    public function verify(string $reference): array
+    public function verify(string $reference): array|string
     {
-        return $this->client->get("transfer/verify/{$reference}");
+        $payload = Payload::get("transfer/verify/$reference");
+        return $this->transporter->requestObject($payload)->data();
     }
-
 }

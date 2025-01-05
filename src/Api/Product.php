@@ -2,86 +2,38 @@
 
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\Contracts\Api\ProductContract;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
 
-/**
- * The Products API allows you create and manage inventories on your integration.
- * @license https://paystack.com/docs/api/product#products
- */
-class Product
+final class Product implements ProductContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function create(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("product", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * Create a product on your integration
-     *
-     * @param string $name Name of product
-     * @param string $description A description for this product
-     * @param integer $price Price should be in kobo if currency is NGN, pesewas, if currency is GHS, and cents, if currency is ZAR
-     * @param string $currency Currency in which price is set. Allowed values are: NGN, GHS, ZAR or USD
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/product#create
-     */
-    public function create(string $name, string $description, int $price, string $currency, $params = []): array
+    public function list(array $params = []): array|string
     {
-        $params['name'] = $name;
-        $params['description'] = $description;
-        $params['price'] = $price;
-        $params['currency'] = $currency;
-        return $this->client->post("product", $params);
+        $payload = Payload::get("product", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List products available on your integration.
-     *
-     * @param array $params Query parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/product#list
-     */
-    public function list($params = []): array
+    public function fetch(string $id): array|string
     {
-        return $this->client->get('product', $params);
+        $payload = Payload::get("product/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Get details of a product on your integration.
-     *
-     * @param string $id The product ID you want to fetch
-     * @return array
-     * @link https://paystack.com/docs/api/product#fetch
-     */
-    public function fetch(string $id): array
+    public function update(string $id, array $params = []): array|string
     {
-        return $this->client->get("/product/{$id}");
-    }
 
-    /**
-     * Update a product details on your integration
-     *
-     * @param string $id Product ID
-     * @param string $name Name of product
-     * @param string $description A description for this product
-     * @param integer $price Price should be in kobo if currency is NGN, pesewas, if currency is GHS, and cents, if currency is ZAR
-     * @param string $currency Currency in which price is set. Allowed values are: NGN, GHS, ZAR or USD. Default value is USD
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/product#update
-     */
-    public function update(string $id, string $name, string $description, int $price, string $currency = "USD", $params = []): array
-    {
-        $params['name'] = $name;
-        $params['description'] = $description;
-        $params['price'] = $price;
-        $params['currency'] = $currency;
-        return $this->client->put("product/{$id}", $params);
+        $payload = Payload::put("product/$id", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 }

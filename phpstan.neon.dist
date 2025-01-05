@@ -1,0 +1,9 @@
+parameters:
+    level: max
+    paths:
+        - src
+    ignoreErrors: 
+    excludePaths: 
+        - ./src/ServiceProviders
+        - ./src/Config.php
+    reportUnmatchedIgnoredErrors: true

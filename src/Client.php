@@ -1,143 +1,162 @@
 <?php
 
+
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack;
+namespace MusheAbdulHakim\Paystack;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Plan;
+use MusheAbdulHakim\Paystack\Api\Charge;
+use MusheAbdulHakim\Paystack\Api\Refund;
+use MusheAbdulHakim\Paystack\Api\Dispute;
+use MusheAbdulHakim\Paystack\Api\Product;
+use MusheAbdulHakim\Paystack\Api\ApplePay;
+use MusheAbdulHakim\Paystack\Api\Customer;
+use MusheAbdulHakim\Paystack\Api\Terminal;
+use MusheAbdulHakim\Paystack\Api\Transfer;
+use MusheAbdulHakim\Paystack\Api\BulkCharge;
+use MusheAbdulHakim\Paystack\Api\Settlement;
+use MusheAbdulHakim\Paystack\Api\SubAccount;
+use MusheAbdulHakim\Paystack\Api\Integration;
+use MusheAbdulHakim\Paystack\Api\PaymentPage;
+use MusheAbdulHakim\Paystack\Api\Transaction;
+use MusheAbdulHakim\Paystack\Api\Subscription;
+use MusheAbdulHakim\Paystack\Api\Verification;
+use MusheAbdulHakim\Paystack\Api\Miscellaneous;
+use MusheAbdulHakim\Paystack\Api\PaymentRequest;
+use MusheAbdulHakim\Paystack\Api\VirtualAccount;
+use MusheAbdulHakim\Paystack\Api\TransferControl;
+use MusheAbdulHakim\Paystack\Api\TransactionSplit;
+use MusheAbdulHakim\Paystack\Api\TransferRecipient;
+use MusheAbdulHakim\Paystack\Contracts\TransporterContract;
+use MusheAbdulHakim\Paystack\Contracts\PaystackClientInterface;
 
-class Client implements PaystackClientInterface
+final readonly class Client implements PaystackClientInterface
 {
-    private $secret_key;
-
-    private $base_url;
-
-    private $http;
-
-    public function __construct($secret_key, $base_url)
-    {
-        $this->base_url = $base_url;
-        $this->secret_key = $secret_key;
-
-        $this->http = new \GuzzleHttp\Client([
-            'base_uri' => $this->base_url
-        ]);
-    }
-
-
     /**
-     * Make Get Request to api endpoint.
-     *
-     * @param string $url
-     * @param array $query
-     * @return array
+     * Creates a Client instance with the given API token.
      */
-    public function get(string $url, $query = []): array
+    public function __construct(private TransporterContract $transporter)
     {
-        try {
-            $response = $this->http->get($url, [
-                'headers' => [
-                    'Authorization' => "Bearer {$this->secret_key}",
-                    'Accept'        => "application/json",
-                    'Cache-Control' => "no-cache"
-                ],
-                'query' => $query
-            ]);
-            return json_decode($response->getBody()->getContents(), true);
-        } catch(\GuzzleHttp\Exception\ClientException $e) {
-            return array($e->getMessage());
-        }
+        // ..
     }
 
-    /**
-     * Make Post Request to api endpoint
-     *
-     * @param string $url
-     * @param array $query
-     * @return array
-     */
-    public function post(string $url, $query = []): array
+    public function transaction(): Transaction
     {
-        try {
-            $response = $this->http->post($url, [
-                'headers' => [
-                    'Authorization' => "Bearer {$this->secret_key}",
-                    'Cache-Control' => "no-cache"
-                ],
-                'form_params' => $query,
-            ]);
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            return array($e->getMessage());
-        }
+        return new Transaction($this->transporter);
+    }
+
+    public function transactionSplit(): TransactionSplit
+    {
+        return new TransactionSplit($this->transporter);
+    }
+
+    public function terminal(): Terminal
+    {
+        return new Terminal($this->transporter);
+    }
+
+    public function customer(): Customer
+    {
+        return new Customer($this->transporter);
+    }
+
+    public function virtualAccount(): VirtualAccount
+    {
+        return new VirtualAccount($this->transporter);
     }
 
 
-    /**
-     * Make PUT Request to api endpoint
-     *
-     * @param string $url
-     * @param array $query
-     * @return array
-     */
-    public function put(string $url, $query = []): array
+    public function applePay(): ApplePay
     {
-        try {
-            $response = $this->http->put($url, [
-                'headers' => [
-                    'Authorization' => "Bearer {$this->secret_key}",
-                    'Cache-Control' => "no-cache"
-                ],
-                'form_params' => $query,
-            ]);
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            return array($e->getMessage());
-        }
+        return new ApplePay($this->transporter);
     }
 
-    /**
-     * Make DELETE Request to api endpoint
-     *
-     * @param string $url
-     * @param array $query
-     * @return array
-     */
-    public function delete(string $url, $query = []): array
+    public function subAccount(): SubAccount
     {
-        try {
-            $response = $this->http->delete($url, [
-                'headers' => [
-                    'Authorization' => "Bearer {$this->secret_key}",
-                    'Cache-Control' => "no-cache"
-                ],
-                'form_params' => $query,
-            ]);
-            return json_decode($response->getBody()->getContents(), true);
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            return array($e->getMessage());
-        }
+        return new SubAccount($this->transporter);
     }
 
-    public function curlPost(string $url, $query = [])
+    public function plan(): Plan
     {
-        $url = $this->base_url.'/'.$url;
-        if((substr($this->base_url, -1) === '/')) {
-            $url = $this->base_url.$url;
-        }
-        $fields_string = http_build_query($query);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Authorization: Bearer ".$this->secret_key,
-            "Cache-Control: no-cache",
-        ));
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = json_decode(curl_exec($ch), true);
-        $headerSent = curl_getinfo($ch, CURLINFO_HEADER_OUT);
-        return $response;
+        return new Plan($this->transporter);
     }
+
+    public function subscription(): Subscription
+    {
+        return new Subscription($this->transporter);
+    }
+
+    public function product(): Product
+    {
+        return new Product($this->transporter);
+    }
+
+    public function paymentPage(): PaymentPage
+    {
+        return new PaymentPage($this->transporter);
+    }
+
+    public function paymentRequest(): PaymentRequest
+    {
+        return new PaymentRequest($this->transporter);
+    }
+
+    public function settlement(): Settlement
+    {
+        return new Settlement($this->transporter);
+    }
+
+
+    public function transferRecipient(): TransferRecipient
+    {
+        return new TransferRecipient($this->transporter);
+    }
+
+    public function transfer(): Transfer
+    {
+        return new Transfer($this->transporter);
+    }
+
+    public function transferControl(): TransferControl
+    {
+        return new TransferControl($this->transporter);
+    }
+
+    public function bulkCharge(): BulkCharge
+    {
+        return new BulkCharge($this->transporter);
+    }
+
+    public function integration(): Integration
+    {
+        return new Integration($this->transporter);
+    }
+
+    public function charge(): Charge
+    {
+        return new Charge($this->transporter);
+    }
+
+    public function dispute(): Dispute
+    {
+        return new Dispute($this->transporter);
+    }
+
+
+    public function refund(): Refund
+    {
+        return new Refund($this->transporter);
+    }
+
+    public function verification(): Verification
+    {
+        return new Verification($this->transporter);
+    }
+
+    public function miscellaneous(): Miscellaneous
+    {
+        return new Miscellaneous($this->transporter);
+    }
+
 }

@@ -1,203 +1,66 @@
 <?php
 
-declare(strict_types=1);
+namespace MusheAbdulHakim\Paystack\Api;
 
-namespace Musheabdulhakim\Paystack\Api;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
+use MusheAbdulHakim\Paystack\Contracts\Api\TransactionContract;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
-
-/**
- * The Transactions API allows you create and manage payments on your integration
- * @link https://paystack.com/docs/api/#transaction
- */
-class Transaction
+final class Transaction implements TransactionContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function initialize(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("transaction/initialize", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Initialize a transaction from your backend
-     *
-     * @param string $email
-     * @param string $amount
-     * @param array $params
-     * @return array
-     */
-    public function init(string $email, string $amount, $params = []): array
+    public function verify(string $reference): array|string
     {
-        $params['email'] = $email;
-        $params['amount'] = $amount;
-        return $this->client->post('transaction/initialize', $params);
+        $payload = Payload::get("transaction/verify/$reference");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Initialize a transaction
-     *
-     * @param array $params
-     * @return array
-     */
-    public function initialize(array $params): array
+    public function list(array $params = []): array|string
     {
-        return $this->client->post('transaction/initialize', $params);
+        $payload = Payload::get("transaction", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List transactions carried out on your integration.
-     *
-     * @link https://paystack.com/docs/api/transaction/#list
-     *
-     * @param array $params
-     * @return array
-     */
-    public function list($params = []): array
+    public function fetch(int $id): array|string
     {
-        return $this->client->get('transaction', $params);
+        $payload = Payload::get("transaction/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Verify Transaction
-     *
-     * @link https://paystack.com/docs/api/transaction/#verify
-     * @param string $reference
-     * @return array
-     */
-    public function verify(string $reference): array
+    public function chargeAuth(array $params = []): array|string
     {
-        $params['reference'] = $reference;
-        return $this->client->get('transaction/verify/'.$reference);
+        $payload = Payload::post("transaction/charge_authorization", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Get details of a transaction carried out on your integration.
-     *
-     * @link https://paystack.com/docs/api/transaction/#fetch
-     * @param integer $id .An ID for the transaction to fetch
-     * @return array
-     */
-    public function get(int $id): array
+    public function view(string $id): array|string
     {
-        return $this->client->get('transaction/'.$id);
+        $payload = Payload::get("transaction/timeline/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * Get details of a transaction carried out on your integration.
-     *
-     * @link https://paystack.com/docs/api/#transaction-fetch
-     * @param integer $id .An ID for the transaction to fetch
-     * @return array
-     */
-    public function fetch(int $id): array
+    public function totals(array $params = []): array|string
     {
-        return $this->client->get('transaction/'.$id);
+        $payload = Payload::get("transaction/totals", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * All authorizations marked as reusable can be charged with this endpoint whenever you need to receive payments.
-     *
-     * @link https://paystack.com/docs/api/#transaction-charge-authorization
-     * @param string $email
-     * @param string $amount
-     * @param string $authorization_code
-     * @param array $params
-     * @return array
-     */
-    public function chargeAuth(string $email, string $amount, string $authorization_code, $params = []): array
+    public function export(array $params = []): array|string
     {
-        $params['email'] = $email;
-        $params['amount'] = $amount;
-        $params['authorization_code'] = $authorization_code;
-
-        return $this->client->post('transaction/charge_authorization', $params);
+        $payload = Payload::get("transaction/export", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * All Mastercard and Visa authorizations can be checked with this endpoint to know if they have funds for the payment you seek.
-     *  This endpoint should be used when you do not know the exact amount to charge a card when rendering a service.
-     *  It should be used to check if a card has enough funds based on a maximum range value.
-     *  It is well suited for:
-     *   - Ride hailing services
-     *   - Logistics services
-     *
-     *  **Warning**
-     *   You shouldn't use this endpoint to check a card for sufficient funds if you are going to charge the user immediately. This is because we hold funds when this endpoint is called which can lead to an insufficient funds error.
-     *
-     * @link https://paystack.com/docs/api/#transaction-check-authorization
-     * @param string $email
-     * @param string $amount
-     * @param string $authorization_code
-     * @param array $params
-     * @return array
-     */
-    public function checkAuth(string $email, string $amount, string $authorization_code, $params = []): array
+    public function partialDebit(array $params = []): array|string
     {
-        $params['email'] = $email;
-        $params['amount'] = $amount;
-        $params['authorization_code'] = $authorization_code;
-
-        return $this->client->post('transaction/check_authorization', $params);
-    }
-
-
-    /**
-     * View the timeline of a transaction
-     *
-     * @link https://paystack.com/docs/api/transaction/#view-timeline
-     * @param string $id_or_reference .The ID or the reference of the transaction
-     * @return array
-     */
-    public function timeline(string $id_or_reference): array
-    {
-        return $this->client->get('transaction/timeline/'.$id_or_reference);
-    }
-
-    /**
-     * Total amount received on your account
-     *
-     * @link https://paystack.com/docs/api/transaction/#totals
-     * @param array $params
-     * @return array
-     */
-    public function total($params = []): array
-    {
-        return $this->client->get('transaction/totals');
-    }
-
-    /**
-     * List transactions carried out on your integration.
-     *
-     * @link https://paystack.com/docs/api/transaction/#export
-     * @param array $params
-     * @return array
-     */
-    public function export($params = []): array
-    {
-        return $this->client->get('transaction/export');
-    }
-
-
-     /**
-      * Retrieve part of a payment from a customer
-      *
-      * @param string $authorization_code Authorization Code
-      * @param string $currency Specify the currency you want to debit. Allowed values are NGN, GHS, ZAR or USD.
-      * @param string $amount Amount should be in kobo if currency is NGN, pesewas, if currency is GHS, and cents, if currency is ZAR
-      * @param string $email Customer's email address (attached to the authorization code)
-      * @param array $params
-      * @link https://paystack.com/docs/api/transaction/#partial-debit
-      * @return array
-      */
-    public function partialDebit(string $authorization_code, string $currency, string $amount, string $email, $params = []): array
-    {
-        $params['authorization_code'] = $authorization_code;
-        $params['currency'] = $currency;
-        $params['amount'] = $amount;
-        $params['email'] = $email;
-        return $this->client->post('transaction/partial_debit', $params);
+        $payload = Payload::post("transaction/partial_debit", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 }

@@ -2,15 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Tests;
+namespace MusheAbdulHakim\CoinGecko\Tests;
 
-use PHPUnit\Framework\TestCase as PHPUnit;
+use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
-class TestCase extends PHPUnit
+class TestCase extends FrameworkTestCase
 {
     public function __construct()
     {
         parent::__construct();
     }
 
+    public function setUp(): void
+    {
+        parent::setUp();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
 }

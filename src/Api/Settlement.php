@@ -2,45 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\Contracts\Api\SettlementContract;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
 
-/**
- * The Settlements API allows you gain insights into payouts made by Paystack to your bank account.
-  *  @link https://paystack.com/docs/api/settlement#settlements
- */
-class Settlement
+final class Settlement implements SettlementContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function list(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::get("settlement", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List settlements made to your settlement accounts.
-     *
-     * @param array $params Query parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/settlement#list
-     */
-    public function list($params = []): array
+    public function transactions(string $id, array $params = []): array|string
     {
-        return $this->client->get("settlement", $params);
-    }
 
-    /**
-     * Get the transactions that make up a particular settlement
-     * Note: If you plan to store or make use of the the transaction ID, you should represent it as a unsigned 64-bit integer. To learn more, check out our changelog @link https://paystack.com/docs/changelog/api/#june-2022.
-     *
-     * @param string $id The settlement ID in which you want to fetch its transactions
-     * @param array $params Query parameters.
-     * @return array
-     */
-    public function transactions(string $id, $params = []): array
-    {
-        return $this->client->get("settlement/{$id}/transactions", $params);
+        $payload = Payload::get("settlement/$id/transactions", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 }

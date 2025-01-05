@@ -4,98 +4,30 @@ namespace Musheabdulhakim\Paystack\ServiceProviders;
 
 use Musheabdulhakim\Paystack\Paystack;
 use Illuminate\Support\ServiceProvider;
-use Musheabdulhakim\Paystack\Contracts\PaystackInterface;
-use Musheabdulhakim\Paystack\Facades\Paystack as PaystackFacade;
+use Illuminate\Contracts\Foundation\Application;
+use Musheabdulhakim\Paystack\Facades\PaystackFacade;
 
 class PaystackServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
+     * The paths that should be published.
      *
-     * @var bool
+     * @var array
      */
-    protected $defer = false;
+    public static $publishes = [
+        __DIR__ . '/Config/paystack.php' => config_path('paystack.php'),
+    ];
 
     /**
-     * Boot the package.
-     */
-    public function boot()
-    {
-        /*
-        |--------------------------------------------------------------------------
-        | Publish the Config file from the Package to the App directory
-        |--------------------------------------------------------------------------
-        */
-        $this->configPublisher();
-    }
-
-    /**
-     * Register the service provider.
+     * Determine if the provider is deferred.
      *
-     * @return void
+     * @return bool
      */
-    public function register()
+    public function isDeferred()
     {
-        /*
-        |--------------------------------------------------------------------------
-        | Implementation Bindings
-        |--------------------------------------------------------------------------
-        */
-        $this->implementationBindings();
-
-        /*
-        |--------------------------------------------------------------------------
-        | Facade Bindings
-        |--------------------------------------------------------------------------
-        */
-        $this->facadeBindings();
-
-        /*
-        |--------------------------------------------------------------------------
-        | Registering Service Providers
-        |--------------------------------------------------------------------------
-        */
-        $this->serviceProviders();
+        return false;
     }
 
-    /**
-     * Implementation Bindings
-     */
-    private function implementationBindings()
-    {
-        $this->app->bind(
-            PaystackInterface::class,
-            Paystack::class
-        );
-    }
-
-    /**
-     * Publish the Config file from the Package to the App directory
-     */
-    private function configPublisher()
-    {
-        // When users execute Laravel's vendor:publish command, the config file will be copied to the specified location
-        $this->publishes([
-            __DIR__ . '/Config/paystack.php' => config_path('paystack.php'),
-        ]);
-    }
-
-    /**
-     * Facades Binding
-     */
-    private function facadeBindings()
-    {
-        // Register 'paystack' instance container
-        $this->app['paystack'] = $this->app->share(function ($app) {
-            return $app->make(Paystack::class);
-        });
-
-        // Register 'Paystack' Alias, So users don't have to add the Alias to the 'app/config/app.php'
-        $this->app->booting(function () {
-            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('Paystack', PaystackFacade::class);
-        });
-    }
 
     /**
      * Get the services provided by the provider.
@@ -109,11 +41,4 @@ class PaystackServiceProvider extends ServiceProvider
         ];
     }
 
-    /**
-     * Registering Other Custom Service Providers (if you have)
-     */
-    private function serviceProviders()
-    {
-        // $this->app->register('...\...\...');
-    }
 }

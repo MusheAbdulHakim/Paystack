@@ -2,117 +2,59 @@
 
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
+use MusheAbdulHakim\Paystack\Contracts\Api\SubscriptionContract;
 
-/**
- * The Subscriptions API allows you create and manage recurring payment on your integration.
- * @link https://paystack.com/docs/api/subscription#subscriptions
-*/
-class Subscription
+final class Subscription implements SubscriptionContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function create(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("subscription", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Create a subscription on your integration
-     *
-     * @param string $customer Customer's email address or customer code
-     * @param string $plan Plan code
-     * @param string $authorization If customer has multiple authorizations, you can set the desired authorization you wish to use for this subscription here. If this is not supplied, the customer's most recent authorization would be used
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/subscription#create
-     */
-    public function create(string $customer, string $plan, string $authorization, $params = []): array
+    public function list(array $params = []): array|string
     {
-        $params['customer'] = $customer;
-        $params['plan'] = $plan;
-        $params['authorization'] = $authorization;
-        return $this->client->post("subscription", $params);
+        $payload = Payload::get("subscription", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List subscriptions available on your integration.
-     *
-     * @param array $params Optional query parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/subscription#list
-     */
-    public function list($params = []): array
+    public function fetch(string $id): array|string
     {
-        return $this->client->get("subscription", $params);
+        $payload = Payload::get("subscription/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Get details of a subscription on your integration.
-     *
-     * @param string $id_or_code The subscription ID or code you want to fetch
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/subscription#fetch
-     */
-    public function fetch(string $id_or_code): array
-    {
-        return $this->client->get("subscription/{$id_or_code}");
-    }
-
-    /**
-     * Enable a subscription on your integration
-     *
-     * @param string $code Subscription code
-     * @param string $token Email token
-     * @return array
-     * @link https://paystack.com/docs/api/subscription#enable
-     */
-    public function enable(string $code, string $token): array
+    public function enable(string $code, string $token): array|string
     {
         $params['code'] = $code;
         $params['token'] = $token;
-        return $this->client->post("subscription/enable", $params);
+        $payload = Payload::post("subscription/enable", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Disable a subscription on your integration
-     *
-     * @param string $code Subscription code
-     * @param string $token Email token
-     * @return array
-     * @link https://paystack.com/docs/api/subscription#disable
-     */
-    public function disable(string $code, string $token): array
+    public function disable(string $code, string $token): array|string
     {
         $params['code'] = $code;
         $params['token'] = $token;
-        return $this->client->post('subscription/disable', $params);
+        $payload = Payload::post("subscription/disable", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Generate a link for updating the card on a subscription
-     *
-     * @param string $code Subscription code
-     * @return array
-     * @link https://paystack.com/docs/api/subscription#manage-link
-     */
-    public function link(string $code): array
+    public function generateLink(string $code): array|string
     {
-        return $this->client->get("subscription/{$code}/manage/link/");
+        $payload = Payload::get("subscription/$code/manage/link");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Email a customer a link for updating the card on their subscription
-     *
-     * @param string $code Subscription code
-     * @return array
-     * @link https://paystack.com/docs/api/subscription#manage-email
-     */
-    public function sendUpdateSubscriptionLink(string $code): array
+    public function sendLink(string $code): array|string
     {
-        return $this->client->post("subscription/{$code}/manage/email/");
+        $payload = Payload::post("subscription/$code/manage/email");
+        return $this->transporter->requestObject($payload)->data();
     }
 }

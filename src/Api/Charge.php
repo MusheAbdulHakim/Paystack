@@ -1,129 +1,67 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\Contracts\Api\ChargeContract;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
 
-/**
- * The Charge Class allows you to configure payment channel of your choice when initiating a payment.
- * @link https://paystack.com/docs/api/charge#charges
- */
-class Charge
+final class Charge implements ChargeContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
-     * Initiate a payment by integrating the payment channel of your choice (@link https://paystack.com/docs/payments/payment-channels).
-     *
-     * @param string $email https://paystack.com/docs/payments/payment-channels
-     * @param string $amount Amount should be in kobo if currency is NGN, pesewas, if currency is GHS, and cents, if currency is ZAR
-     * @param array $params Optional parameters. Refer to the docs.
-     * @return array
-     * @link https://paystack.com/docs/api/charge#create
-     */
-    public function create(string $email, string $amount, $params = []): array
+    public function create(string $email, string $amount, array $params = []): array|string
     {
         $params['email'] = $email;
         $params['amount'] = $amount;
-       return $this->client->post("charge", $params);
+        $payload = Payload::post("charge", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Submit PIN to continue a charge
-     *
-     * @param string $pin PIN submitted by user
-     * @param string $reference Reference for transaction that requested pin
-     * @return array
-     * @link https://paystack.com/docs/api/charge#submit-pin
-     */
-    public function pin(string $pin, string $reference): array
+    public function submitPin(string $pin, string $reference): array|string
     {
         $params['pin'] = $pin;
         $params['reference'] = $reference;
-        return $this->client->post("charge/submit_pin", $params);
+        $payload = Payload::post("charge/submit_pin", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Submit OTP to complete a charge
-     *
-     * @param string $otp OTP submitted by user
-     * @param string $reference Reference for ongoing transaction
-     * @return array
-     * @link https://paystack.com/docs/api/charge#submit-otp
-     */
-    public function otp(string $otp, string $reference): array
+    public function submitOTP(string $otp, string $reference): array|string
     {
+
         $params['otp'] = $otp;
         $params['reference'] = $reference;
-        return $this->client->post("charge/submit_otp", $params);
+        $payload = Payload::post("charge/submit_otp", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Submit phone number when requested
-     *
-     * @param string $phone Phone submitted by user
-     * @param string $reference Reference for ongoing transaction
-     * @return array
-     * @link https://paystack.com/docs/api/charge#submit-phone
-     */
-    public function phone(string $phone, string $reference): array
+    public function submitPhone(string $phone, string $reference): array|string
     {
         $params['phone'] = $phone;
         $params['reference'] = $reference;
-        return $this->client->post("charge/submit_phone", $params);
+        $payload = Payload::post("charge/submit_phone", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Submit Birthday when requested
-     *
-     * @param string $birthday Birthday submitted by user e.g. 2016-09-21
-     * @param string $reference Reference for ongoing transaction
-     * @return array
-     * @link https://paystack.com/docs/api/charge#submit-birthday
-     */
-    public function birthday(string $birthday, string $reference): array
+    public function submitBirthday(string $birthday, string $reference): array|string
     {
         $params['birthday'] = $birthday;
         $params['reference'] = $reference;
-        return $this->client->post("", $params);
+        $payload = Payload::post("charge/submit_birthday", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Submit address to continue a charge
-     *
-     * @param string $address Address submitted by user
-     * @param string $reference Reference for ongoing transaction
-     * @param string $city City submitted by user
-     * @param string $state State submitted by user
-     * @param string $zipcode Zipcode submitted by user
-     * @return array
-     * @link https://paystack.com/docs/api/charge#submit-address
-     */
-    public function address(string $address, string $reference, string $city, string $state, string $zipcode): array
+    public function submitAddress(array $params = []): array|string
     {
-        $params['address'] = $address;
-        $params['reference'] = $reference;
-        $params['city'] = $city;
-        $params['state'] = $state;
-        $params['zipcode'] = $zipcode;
-        return $this->client->post("charge/submit_address", $params);
+        $payload = Payload::post("charge/submit_address", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * When you get pending as a charge status or if there was an exception when calling any of the /charge endpoints, wait 10 seconds or more, then make a check to see if its status has changed. Don't call too early as you may get a lot more pending than you should.
-     *
-     * @param string $reference The reference to check
-     * @return array
-     * @link https://paystack.com/docs/api/charge#check
-     */
-    public function checkPending(string $reference): array
+    public function checkPending(string $reference): array|string
     {
-        return $this->client->get("charge/{$reference}");
+        $payload = Payload::get("charge/$reference");
+        return $this->transporter->requestObject($payload)->data();
     }
 }

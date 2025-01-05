@@ -1,106 +1,50 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
+use MusheAbdulHakim\Paystack\Contracts\Api\TransferRecipientContract;
 
-/**
- * The Transfer Recipients API allows you create and manage beneficiaries that you send money to.
- * @link https://paystack.com/docs/api/transfer-recipient#transfers-recipients
- */
-class TransferRecipient
+final class TransferRecipient implements TransferRecipientContract
 {
+    use Transportable;
 
-    private $client;
-
-    public function __construct(PaystackClientInterface $client)
+    public function create(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("transferrecipient", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Creates a new recipient. A duplicate account number will lead to the retrieval of the existing record.
-     *
-     * @param string $type Recipient Type. It could be one of: nuban, mobile_money or basa
-     * @param string $name A name for the recipient
-     * @param string $account_number Required if type is nuban or basa
-     * @param string $bank_code Required if type is nuban or basa. You can get the list of Bank Codes by calling the List Banks endpoint.
-     * @param string $currency Currency for the account receiving the transfer
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/transfer-recipient#create
-     */
-    public function create(string $type, string $name, string $account_number, string $bank_code, string $currency, $params = []): array
-    {
-        $params['type'] = $type;
-        $params['name'] = $name;
-        $params['account_number'] = $account_number;
-        $params['bank_code'] = $bank_code;
-        $params['currency'] = $currency;
-        return $this->client->post("transferrecipient", $params);
-    }
-
-    /**
-     * Create multiple transfer recipients in batches. A duplicate account number will lead to the retrieval of the existing record.
-     *
-     * @param array $batch A list of transfer recipient object. Each object should contain type, name, and bank_code. Any Create Transfer Recipient param can also be passed. @link https://paystack.com/docs/api/transfer-recipient#create
-     * @return array
-     * @link https://paystack.com/docs/api/transfer-recipient#bulk
-     */
-    public function bulk(array $batch): array
+    public function bulk(array $batch = []): array|string
     {
         $params['batch'] = $batch;
-        return $this->client->post("transferrecipient/bulk", $params);
+        $payload = Payload::post("transferrecipient/bulk", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List transfer recipients available on your integration
-     *
-     * @param array $params Query parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/transfer-recipient#list
-     */
-    public function list($params = []): array
+    public function list(array $params = []): array|string
     {
-        return $this->client->get('transferrecipient', $params);
+        $payload = Payload::get("transferrecipient", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
-    /**
-     * Fetch the details of a transfer recipient
-     *
-     * @param string $id_or_code An ID or code for the recipient whose details you want to receive.
-     * @return array
-     * @link https://paystack.com/docs/api/transfer-recipient#fetch
-     */
-    public function fetch(string $id_or_code): array
+    public function fetch(string $id): array|string
     {
-        return $this->client->get("transferrecipient/{$id_or_code}");
+        $payload = Payload::get("transferrecipient/$id");
+        return $this->transporter->requestObject($payload)->data();
+    }
+    public function update(string $id, array $params = []): array|string
+    {
+        $payload = Payload::put("transferrecipient/$id", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Update transfer recipients available on your integration
-     *
-     * @param string $id_or_code
-     * @param string $name A name for the recipient
-     * @param array $params Optional parameters
-     * @return array
-     * @link https://paystack.com/docs/api/transfer-recipient#update
-     */
-    public function update(string $id_or_code, string $name, $params = []): array
+    public function delete(string $id): array|string
     {
-        $params['name'] = $name;
-        return $this->client->put("transferrecipient/{$id_or_code}", $params);
+        $payload = Payload::delete("transferrecipient", $id);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Delete a transfer recipient (sets the transfer recipient to inactive)
-     *
-     * @param string $id_or_code An ID or code for the recipient who you want to delete.
-     * @return array
-     * @link https://paystack.com/docs/api/transfer-recipient#delete
-     */
-    public function delete(string $id_or_code): array
-    {
-        return $this->client->delete("transferrecipient/{$id_or_code}");
-    }
 }

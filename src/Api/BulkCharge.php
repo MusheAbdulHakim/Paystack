@@ -1,95 +1,52 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\Contracts\Api\BulkChargeContract;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
 
-/**
- * The Bulk Charges Class allows you create and manage multiple recurring payments from your customers.
- * @link https://paystack.com/docs/api/bulk-charge#bulk-charges
- */
-class BulkCharge {
+final class BulkCharge implements BulkChargeContract
+{
+    use Transportable;
 
-    private $client;
 
-    public function __construct(PaystackClientInterface $client)
+    public function init(array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("bulkcharge", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Send an array of objects with authorization codes and amount (in kobo if currency is NGN, pesewas, if currency is GHS, and cents if currency is ZAR ) so we can process transactions as a batch.
-     *
-     * @param array $params A list of charge object. Each object consists of an authorization, amount and reference
-     * @return array
-     * @link https://www.https://paystack.com/docs/api/bulk-charge#initiate.com
-     */
-    public function init($params = []): array
+    public function list(array $params = []): array|string
     {
-        return $this->client->post('bulkcharge', $params);
+        $payload = Payload::get("bulkcharge", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * This lists all bulk charge batches created by the integration. Statuses can be active, paused, or complete
-     *
-     * @param array $params Query parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/bulk-charge#list
-     */
-    public function list($params = []): array
+    public function fetch(string $id): array|string
     {
-        return $this->client->get('bulkcharge', $params);
+        $payload = Payload::get("bulkcharge/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * This method retrieves a specific batch code. It also returns useful information on its progress by way of the total_charges and pending_charges attributes.
-     *
-     * @param string $id_or_code An ID or code for the charge whose batches you want to retrieve.
-     * @return array
-     * @link https://paystack.com/docs/api/bulk-charge#fetch-charge
-     */
-    public function fetch(string $id_or_code): array
+    public function batch(string $id, array $params = []): array|string
     {
-        return $this->client->get("bulkcharge/{$id_or_code}");
+        $payload = Payload::get("bulkcharge/$id/charges", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * This method retrieves the charges associated with a specified batch code. Pagination parameters are available. You can also filter by status. Charge statuses can be pending, success or failed.
-     *
-     * @param string $id_or_code An ID or code for the batch whose charges you want to retrieve.
-     * @param array $params Query parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/bulk-charge#fetch-charge
-     */
-    public function charges(string $id_or_code, $params = []): array
+    public function pause(string $code): array|string
     {
-        return $this->client->get("bulkcharge/{$id_or_code}/charges", $params);
+        $payload = Payload::get("bulkcharge/pause/$code");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Use this method to pause processing a batch
-     *
-     * @param string $batch_code The batch code for the bulk charge you want to pause
-     * @return array
-     * @link https://paystack.com/docs/api/bulk-charge#pause
-     */
-    public function pause(string $batch_code): array
+    public function resume(string $code): array|string
     {
-        return $this->client->get("bulkcharge/pause/{$batch_code}");
-
-    }
-
-    /**
-     * Use this endpoint to resume processing a batch
-     *
-     * @param string $batch_code The batch code for the bulk charge you want to resume
-     * @return array
-     * @link https://paystack.com/docs/api/bulk-charge#resume
-     */
-    public function resume(string $batch_code): array
-    {
-        return $this->client->get("bulkcharge/resume/{$batch_code}");
+        $payload = Payload::get("/bulkcharge/resume/$code");
+        return $this->transporter->requestObject($payload)->data();
     }
 
 }

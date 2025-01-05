@@ -1,134 +1,59 @@
 <?php
 
-declare(strict_types=1);
+namespace MusheAbdulHakim\Paystack\Api;
 
-namespace Musheabdulhakim\Paystack\Api;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\Contracts\Api\TerminalContract;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
-
-class Terminal
+final class Terminal implements TerminalContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function sendEvent(string $terminalId, array $params = []): array|string
     {
-        $this->client = $client;
+        $payload = Payload::post("terminal/$terminalId/event", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    public function sendEvent(string $terminal_id, string $type, string $action, $data = []): array
+    public function eventStatus(string $terminalId, string $eventId): array|string
     {
-        $url = "terminal/{$terminal_id}/event";
-        $params['type'] = $type;
-        $params['action'] = $action;
-        $params['data'] = $data;
-        return $this->client->post($url, $params);
+        $payload = Payload::get("terminal/$terminalId/event/$eventId");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * Check the status of an event sent to the Terminal
-     *
-     * @param string $terminal_id The ID of the Terminal the event was sent to.
-     * @param string $event_id The ID of the event that was sent to the Terminal
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/terminal#fetch-event-status
-     */
-    public function fetchEvent(string $terminal_id, string $event_id): array
+    public function status(string $terminalId): array|string
     {
-        $url = "terminal/{$terminal_id}/event/{$event_id}";
-        return $this->client->get($url);
+        $payload = Payload::get("terminal/$terminalId/presence");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * Check the availiability of a Terminal before sending an event to it
-     *
-     * @param string $terminal_id The ID of the Terminal you want to check
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/terminal#fetch-terminal-status
-     */
-    public function status(string $terminal_id): array
+    public function list(array $params = []): array|string
     {
-        $url = "terminal/{$terminal_id}/presence";
-        return $this->client->get($url);
+        $payload = Payload::get("terminal", $params);
+        return $this->transporter->requestObject($payload)->data();
+    }
+    public function fetch(string $terminalId): array|string
+    {
+        $payload = Payload::get("terminal/$terminalId");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * List the Terminals available on your integration
-     *
-     * @param array|null $params Query Parameters
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/terminal#list
-     */
-    public function list(?array $params = []): array
+    public function update(string $terminalId, array $params = []): array|string
     {
-        return $this->client->get('terminal');
+        $payload = Payload::put("terminal/$terminalId", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * Get the details of a Terminal
-     *
-     * @param string $terminal_id The ID of the Terminal the event was sent to.
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/terminal#fetch
-     */
-    public function terminal(string $terminal_id): array
+    public function commission(array $params = []): array|string
     {
-        $url = "terminal/{$terminal_id}";
-        return $this->client->get($url);
+        $payload = Payload::post("terminal/commission_device", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-
-    /**
-     * Update the details of a Terminal
-     *
-     * @param string $terminal_id The ID of the Terminal you want to update
-     * @param string $name Name of the terminal
-     * @param string $address Name of the terminal
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/terminal#update
-     */
-    public function update(string $terminal_id, string $name, string $address): array
+    public function deCommission(array $params = []): array|string
     {
-        $url = "terminal/{$terminal_id}";
-        $params['name'] = $name;
-        $params['address'] = $address;
-        return $this->client->put($url, $params);
-    }
-
-    /**
-     * Activate your debug device by linking it to your integration
-     *
-     * @param string $serial_number Device Serial Number
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/terminal#commission
-     */
-    public function commission(string $serial_number): array
-    {
-        $params['serial_number'] = $serial_number;
-        return $this->client->post("terminal/commission_device", $params);
-    }
-
-
-    /**
-     * Unlink your debug device from your integration
-     *
-     * @param string $serial_number Device Serial Number
-     * @return array
-     *
-     * @link https://paystack.com/docs/api/terminal#decommission
-     */
-    public function decommission(string $serial_number): array
-    {
-        $params['serial_number'] = $serial_number;
-        return $this->client->post("terminal/decommission_device", $params);
+        $payload = Payload::post("terminal/decommission_device", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 }

@@ -1,62 +1,38 @@
 <?php
 
-declare(strict_types=1);
+namespace MusheAbdulHakim\Paystack\Api;
 
-namespace Musheabdulhakim\Paystack\Api;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\Contracts\Api\ApplePayContract;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
-
-/**
- * The Apple Pay API allows you register your application's top-level domain or subdomain.
- * @link https://paystack.com/docs/api/apple-pay#apple-pay
- */
-class ApplePay
+final class ApplePay implements ApplePayContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function register(string $domain): array|string
     {
-        $this->client = $client;
+        $params['domainName'] = $domain;
+        $payload = Payload::post("apple-pay/domain", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Register a top-level domain or subdomain for your Apple Pay integration.
-     *
-     * @param string $domainName Domain name to be registered
-     * @return array
-     * @link https://paystack.com/docs/api/apple-pay#register-domain
-     */
-    public function register(string $domainName): array
+    public function list(array $params = []): array|string
     {
-        $params['domainName'] = $domainName;
-        return $this->client->post('apple-pay/domain', $params);
+        $payload = Payload::get("apple-pay/domain", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Lists all registered domains on your integration. Returns an empty array if no domains have been added.
-     *
-     * @param boolean $use_cursor Flag to enable cursor pagination on the endpoint
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/apple-pay#list-domains
-     */
-    public function list(bool $use_cursor, $params = []): array
-    {
-        $params['use_cursor'] = $use_cursor;
-        return $this->client->get('apple-pay/domain', $params);
-    }
 
-    /**
-     * Unregister a top-level domain or subdomain previously used for your Apple Pay integration.
-     *
-     * @param string $domainName Domain name to be registered
-     * @return array
-     * @link https://paystack.com/docs/api/apple-pay#unregister-domain
-     */
-    public function unRegister(string $domainName): array
+    public function unregister(string $domain): array|string
     {
-        $params['domainName'] = $domainName;
-        return $this->client->delete('apple-pay/domain', $params);
+        $params['domainName'] = $domain;
+        $payload = Payload::custom(
+            \MusheAbdulHakim\Paystack\Enums\Transporter\Method::DELETE,
+            \MusheAbdulHakim\Paystack\Enums\Transporter\ContentType::JSON,
+            "apple-pay/domain",
+            $params
+        );
+        return $this->transporter->requestObject($payload)->data();
     }
-
 }

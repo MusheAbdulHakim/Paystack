@@ -2,113 +2,51 @@
 
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
+use MusheAbdulHakim\Paystack\Contracts\Api\PaymentPageContract;
 
-/**
- * The Payment Pages API provides a quick and secure way to collect payment for products.
- * @link https://paystack.com/docs/api/page#payment-pages
- *
- */
-class PaymentPage
+final class PaymentPage implements PaymentPageContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
-     * Create a payment page on your integration
-     *
-     * @param string $name Name of page
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/page#create
-     */
-    public function create(string $name, $params = []): array
+    public function create(string $name, array $params = []): array|string
     {
         $params['name'] = $name;
-        return $this->client->post('page', $params);
+        $payload = Payload::post("page", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * List payment pages available on your integration.
-     *
-     * @param array $params Optional query parameters. Refer to the docs
-     * @return array
-     */
-    public function list($params = []): array
+    public function list(array $params = []): array|string
     {
-        return $this->client->get('page', $params);
+        $payload = Payload::get("page", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Get details of a payment page on your integration.
-     *
-     * @param string $id_or_slug The page ID or slug you want to fetch
-     * @return array
-     */
-    public function fetch(string $id_or_slug): array
+    public function fetch(string $id): array|string
     {
-        return $this->client->get("page/{$id_or_slug}");
+        $payload = Payload::get("page/$id");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Update a payment page details on your integration
-     *
-     * @param string $id_or_slug Page ID or slug
-     * @param string $name Name of page.
-     * @param string $description A description for this page
-     * @param array $params Optional parameters. Refer to the docs
-     * @return array
-     * @link https://paystack.com/docs/api/page#update
-     */
-    public function update(string $id_or_slug, string $name, string $description, $params = []): array
+    public function update(string $id, array $params = []): array|string
     {
-        $params['name'] = $name;
-        $params['description'] = $description;
-        return $this->client->put("page/{$id_or_slug}", $params);
+        $payload = Payload::put("page/$id", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Check the availability of a slug for a payment page.
-     *
-     * @param string $slug URL slug to be confirmed
-     * @return array
-     * @link https://paystack.com/docs/api/page#check-slug
-     */
-    public function isSlugAvailable(string $slug): array
+    public function checkSlug(string $slug): array|string
     {
-        return $this->client->get("page/check_slug_availability/{$slug}");
+        $payload = Payload::get("page/check_slug_availability/$slug");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Check the availability of a slug for a payment page.
-     *
-     * @param string $slug URL slug to be confirmed
-     * @return array
-     * @link https://paystack.com/docs/api/page#check-slug
-     */
-    public function checkSlugAvailable(string $slug): array
+    public function addProduct(string $id, array $products = []): array|string
     {
-        return $this->isSlugAvailable($slug);
+        $params['product'] = $products;
+        $payload = Payload::post("page/$id/product", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
-
-    /**
-     * Add products to a payment page
-     *
-     * @param integer $id Id of the payment page
-     * @param array $product Ids of all the products
-     * @return array
-     * @link https://paystack.com/docs/api/page#add-products
-     */
-    public function addProducts(int $id, array $product): array
-    {
-        $params['product'] = $product;
-        return $this->client->post("page/{$id}/product", $params);
-    }
-
 }

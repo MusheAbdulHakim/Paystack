@@ -1,44 +1,27 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Musheabdulhakim\Paystack\Api;
+namespace MusheAbdulHakim\Paystack\Api;
 
-use Musheabdulhakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\Concerns\Transportable;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
+use MusheAbdulHakim\Paystack\Contracts\Api\IntegrationContract;
 
-/**
- * The Integration Class allows you manage some settings on your integration.
- * @link https://paystack.com/docs/api/integration#integration
- */
-class Integration
+final class Integration implements IntegrationContract
 {
-    private $client;
+    use Transportable;
 
-    public function __construct(PaystackClientInterface $client)
+    public function fetchPayment(): array|string
     {
-        $this->client = $client;
+        $payload = Payload::get("integration/payment_session_timeout");
+        return $this->transporter->requestObject($payload)->data();
     }
 
-    /**
-     * Fetch the payment session timeout on your integration
-     *
-     * @return array
-     * @link https://paystack.com/docs/api/integration#fetch-timeout
-     */
-    public function timeout(): array
-    {
-        return $this->client->get("integration/payment_session_timeout");
-    }
-
-    /**
-     * Update the payment session timeout on your integration
-     *
-     * @param integer $timeout
-     * @return array
-     * @link https://paystack.com/docs/api/integration#update-timeout
-     */
-    public function update(int $timeout): array
+    public function updatePayment(int $timeout): array|string
     {
         $params['timeout'] = $timeout;
-        return $this->client->put("integration/payment_session_timeout", $params);
+        $payload = Payload::put("integration/payment_session_timeout", $params);
+        return $this->transporter->requestObject($payload)->data();
     }
 }
