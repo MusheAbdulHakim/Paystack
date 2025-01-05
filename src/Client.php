@@ -10,6 +10,7 @@ use MusheAbdulHakim\Paystack\Api\Product;
 use MusheAbdulHakim\Paystack\Api\ApplePay;
 use MusheAbdulHakim\Paystack\Api\BulkCharge;
 use MusheAbdulHakim\Paystack\Api\Customer;
+use MusheAbdulHakim\Paystack\Api\Integration;
 use MusheAbdulHakim\Paystack\Api\Terminal;
 use MusheAbdulHakim\Paystack\Api\Transfer;
 use MusheAbdulHakim\Paystack\Api\Settlement;
@@ -120,6 +121,11 @@ final readonly class Client implements PaystackClientInterface
     public function bulkCharge(): BulkCharge
     {
         return new BulkCharge($this->transporter);
+    }
+
+    public function integration(): Integration
+    {
+        return new Integration($this->transporter);
     }
 
 }
