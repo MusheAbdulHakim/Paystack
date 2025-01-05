@@ -6,12 +6,14 @@ declare(strict_types=1);
 namespace MusheAbdulHakim\Paystack;
 
 use MusheAbdulHakim\Paystack\Api\Charge;
+use MusheAbdulHakim\Paystack\Api\Dispute;
 use MusheAbdulHakim\Paystack\Api\Plan;
 use MusheAbdulHakim\Paystack\Api\Product;
 use MusheAbdulHakim\Paystack\Api\ApplePay;
 use MusheAbdulHakim\Paystack\Api\BulkCharge;
 use MusheAbdulHakim\Paystack\Api\Customer;
 use MusheAbdulHakim\Paystack\Api\Integration;
+use MusheAbdulHakim\Paystack\Api\Refund;
 use MusheAbdulHakim\Paystack\Api\Terminal;
 use MusheAbdulHakim\Paystack\Api\Transfer;
 use MusheAbdulHakim\Paystack\Api\Settlement;
@@ -20,6 +22,7 @@ use MusheAbdulHakim\Paystack\Api\PaymentPage;
 use MusheAbdulHakim\Paystack\Api\Transaction;
 use MusheAbdulHakim\Paystack\Api\Subscription;
 use MusheAbdulHakim\Paystack\Api\PaymentRequest;
+use MusheAbdulHakim\Paystack\Api\Verification;
 use MusheAbdulHakim\Paystack\Api\VirtualAccount;
 use MusheAbdulHakim\Paystack\Api\TransactionSplit;
 use MusheAbdulHakim\Paystack\Api\TransferControl;
@@ -132,6 +135,22 @@ final readonly class Client implements PaystackClientInterface
     public function charge(): Charge
     {
         return new Charge($this->transporter);
+    }
+
+    public function dispute(): Dispute
+    {
+        return new Dispute($this->transporter);
+    }
+
+
+    public function refund(): Refund
+    {
+        return new Refund($this->transporter);
+    }
+
+    public function verification(): Verification
+    {
+        return new Verification($this->transporter);
     }
 
 }
