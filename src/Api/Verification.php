@@ -12,7 +12,7 @@ final class Verification implements VerificationContract
 {
     use Transportable;
 
-    public function resolveAccount(string $account_number, $bank_code): array|string
+    public function resolveAccount(string $account_number, string $bank_code): array|string
     {
         $params['account_number'] = $account_number;
         $params['bank_code'] = $bank_code;
