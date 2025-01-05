@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MusheAbdulHakim\Paystack;
 
+use MusheAbdulHakim\Paystack\Api\Charge;
 use MusheAbdulHakim\Paystack\Api\Plan;
 use MusheAbdulHakim\Paystack\Api\Product;
 use MusheAbdulHakim\Paystack\Api\ApplePay;
@@ -126,6 +127,11 @@ final readonly class Client implements PaystackClientInterface
     public function integration(): Integration
     {
         return new Integration($this->transporter);
+    }
+
+    public function charge(): Charge
+    {
+        return new Charge($this->transporter);
     }
 
 }
