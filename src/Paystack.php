@@ -19,14 +19,8 @@ class Paystack
 
     public static function client(string $secretKey, string $baseUri = ''): Client
     {
-        $apiBaseUri = '';
-        if ($baseUri !== '') {
-            $apiBaseUri = $baseUri;
-        }
-
-
         return self::factory()
-            ->withBaseUri($apiBaseUri)
+            ->withBaseUri($baseUri)
             ->withSecretKey($secretKey)
             ->make();
     }

@@ -3,16 +3,9 @@
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
         bootstrap="vendor/autoload.php"
         colors="true"
-        backupGlobals="false"
-        backupStaticAttributes="false"
-        verbose="true"
-        convertErrorsToExceptions="true" 
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true" 
-        processIsolation="false" 
-        stopOnFailure="false"
+        cacheDirectory=".phpunit.cache"
 >
-    <coverage processUncoveredFiles="true">
+    <coverage>
         <report>
             <clover outputFile="build/logs/clover.xml"/>
             <html outputDirectory="build/coverage"/>
@@ -21,8 +14,7 @@
     </coverage>
     <testsuites>
         <testsuite name="Paystack Test Suite">
-            <directory suffix="Test.php">./tests</directory>
-            <exclude>./tests/TestCase.php</exclude>
+            <directory suffix=".php">./tests</directory>
         </testsuite>
     </testsuites>
     <source>
