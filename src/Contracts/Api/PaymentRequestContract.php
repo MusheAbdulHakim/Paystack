@@ -20,21 +20,18 @@ interface PaymentRequestContract
 
     /**
      * Fetch Payment Request
-     * @param string $id
      * @return array<mixed>|string
      */
     public function fetch(string $id): array|string;
 
     /**
      * Verify Payment Request
-     * @param string $code
      * @return array<mixed>|string
      */
     public function verify(string $code): array|string;
 
     /**
      * Send Notification
-     * @param string $code
      * @return array<mixed>|string
      */
     public function notify(string $code): array|string;
@@ -47,15 +44,12 @@ interface PaymentRequestContract
 
     /**
      * Finalize Payment Request
-     * @param string $code
-     * @param bool $sendNotification
      * @return array<mixed>|string
      */
     public function finalize(string $code, bool $sendNotification): array|string;
 
     /**
      * Update Payment Request
-     * @param string $id
      * @param array<mixed> $params
      * @return array<mixed>|string
      */
@@ -63,7 +57,6 @@ interface PaymentRequestContract
 
     /**
      * Archive Payment Request
-     * @param string $code
      * @return array<mixed>|string
      */
     public function archive(string $code): array|string;

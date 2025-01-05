@@ -30,30 +30,24 @@ interface SubscriptionContract
 
     /**
      * Enable Subscription
-     * @param string $code
-     * @param string $token
      * @return array<mixed>|string
      */
     public function enable(string $code, string $token): array|string;
 
     /**
      * Disable Subscription
-     * @param string $code
-     * @param string $token
      * @return array<mixed>|string
      */
     public function disable(string $code, string $token): array|string;
 
     /**
      * Generate Update Subscription Link
-     * @param string $code
      * @return array<mixed>|string
      */
     public function generateLink(string $code): array|string;
 
     /**
      * Send Update Subscription Link
-     * @param string $code
      * @return array<mixed>|string
      */
     public function sendLink(string $code): array|string;

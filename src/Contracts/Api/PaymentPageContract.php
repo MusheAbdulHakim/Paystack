@@ -6,7 +6,6 @@ interface PaymentPageContract
 {
     /**
      * Create Payment Page
-     * @param string $name
      * @param array<mixed> $params
      * @return array<mixed>|string
      */
@@ -28,7 +27,6 @@ interface PaymentPageContract
 
     /**
      * Update Payment Page
-     * @param string $id
      * @param array<mixed> $params
      * @return array<mixed>|string
      */
@@ -36,14 +34,12 @@ interface PaymentPageContract
 
     /**
      * Check Slug Availability
-     * @param string $slug
      * @return array<mixed>|string
      */
     public function checkSlug(string $slug): array|string;
 
     /**
      * Add Products
-     * @param string $id
      * @param array<int> $products
      * @return array<mixed>|string
      */

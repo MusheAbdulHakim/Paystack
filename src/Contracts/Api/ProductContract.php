@@ -22,14 +22,12 @@ interface ProductContract
 
     /**
      * Fetch Product
-     * @param string $id
      * @return array<mixed>|string
      */
     public function fetch(string $id): array|string;
 
     /**
      * Update Product
-     * @param string $id
      * @param array<mixed> $params
      * @return array<mixed>|string
      */
