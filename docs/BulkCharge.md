@@ -4,14 +4,14 @@
 use MusheAbdulHakim\Paystack\Paystack;
 
 $paystack = Paystack::client('secret_key');
-$bulkcharge = $paystack->bulkCharge();
+$response = $bulkcharge->bulkCharge();
 ```
 
 #### Initiate Bulk Charge
 
 ```php
 
-$bulkcharge = $paystack->init([
+$response = $bulkcharge->init([
     //parameters
 ]);
 ```
@@ -21,7 +21,7 @@ $bulkcharge = $paystack->init([
 
 ```php
 
-$bulkcharge = $paystack->list([
+$response = $bulkcharge->list([
     //parameters
 ]);
 
@@ -32,7 +32,7 @@ $bulkcharge = $paystack->list([
 
 ```php
 
-$bulkcharge = $paystack->fetch("id_or_code");
+$response = $bulkcharge->fetch("id_or_code");
 
 ```
 
@@ -42,7 +42,7 @@ $bulkcharge = $paystack->fetch("id_or_code");
 
 ```php
 
-$bulkcharge = $paystack->batch("id_or_code",[
+$response = $bulkcharge->batch("id_or_code",[
     //parameters
 ]);
 
@@ -53,7 +53,7 @@ $bulkcharge = $paystack->batch("id_or_code",[
 
 ```php
 
-$bulkcharge = $paystack->pause("id_or_code");
+$response = $bulkcharge->pause("id_or_code");
 
 ```
 
@@ -62,7 +62,7 @@ $bulkcharge = $paystack->pause("id_or_code");
 
 ```php
 
-$bulkcharge = $paystack->resume("id_or_code");
+$response = $bulkcharge->resume("id_or_code");
 
 ```
 
