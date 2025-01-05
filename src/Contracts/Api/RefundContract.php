@@ -8,7 +8,6 @@ interface RefundContract
 {
     /**
      * Create Refund
-     * @param string $transaction
      * @param array<mixed> $params
      * @return array<mixed>|string
      */
@@ -16,7 +15,6 @@ interface RefundContract
 
     /**
      * List Refunds
-     * @param string $transaction
      * @param array<mixed> $params
      * @return array<mixed>|string
      */
@@ -24,7 +22,6 @@ interface RefundContract
 
     /**
      * Fetch Refund
-     * @param string $id
      * @return array<mixed>|string
      */
     public function fetch(string $id): array|string;

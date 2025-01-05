@@ -15,21 +15,18 @@ interface DisputeContract
 
     /**
      * Fetch Dispute
-     * @param string $id
      * @return array<mixed>|string
      */
     public function fetch(string $id): array|string;
 
     /**
      * List Transaction Disputes
-     * @param string $id
      * @return array<mixed>|string
      */
     public function transactions(string $id): array|string;
 
     /**
      * Update Dispute
-     * @param string $id
      * @param array<mixed> $params
      * @return array<mixed>|string
      */
@@ -37,7 +34,6 @@ interface DisputeContract
 
     /**
      * Add Evidence
-     * @param string $id
      * @param array<mixed> $params
      * @return array<mixed>|string
      */
@@ -45,7 +41,6 @@ interface DisputeContract
 
     /**
      * Get Upload URL
-     * @param string $id
      * @param array<string> $params
      * @return array<mixed>|string
      */
@@ -53,7 +48,6 @@ interface DisputeContract
 
     /**
      * Resolve Dispute
-     * @param string $id
      * @param array<mixed> $params
      * @return array<mixed>|string
      */

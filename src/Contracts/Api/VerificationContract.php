@@ -8,8 +8,6 @@ interface VerificationContract
 {
     /**
      * Resolve Account
-     * @param string $account_number
-     * @param string $bank_code
      * @return array<mixed>|string
      */
     public function resolveAccount(string $account_number, string $bank_code): array|string;

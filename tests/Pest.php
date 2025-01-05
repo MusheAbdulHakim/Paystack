@@ -14,13 +14,11 @@ use Mockery;
 function mockClient(string $method, string $endpoint, array $params, Response|ResponseInterface|string $response, $methodName = 'requestObject', bool $validateParams = true)
 {
     $transporter = Mockery::mock(TransporterContract::class);
-    
+
     $transporter
         ->shouldReceive($methodName)
         ->once()
-        ->withArgs(function (Payload $payload) 
-            use ($validateParams, $method, $endpoint, $params) 
-            {
+        ->withArgs(function (Payload $payload) use ($validateParams, $method, $endpoint, $params) {
             $baseUri = BaseUri::from('https://api.paystack.co');
             $headers = Headers::withAuthorization(ApiKey::from('foo'));
             $queryParams = QueryParams::create();
