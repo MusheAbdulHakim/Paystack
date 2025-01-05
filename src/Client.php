@@ -5,21 +5,24 @@ declare(strict_types=1);
 
 namespace MusheAbdulHakim\Paystack;
 
-use MusheAbdulHakim\Paystack\Api\ApplePay;
-use MusheAbdulHakim\Paystack\Api\Customer;
-use MusheAbdulHakim\Paystack\Api\PaymentPage;
-use MusheAbdulHakim\Paystack\Api\PaymentRequest;
 use MusheAbdulHakim\Paystack\Api\Plan;
 use MusheAbdulHakim\Paystack\Api\Product;
+use MusheAbdulHakim\Paystack\Api\ApplePay;
+use MusheAbdulHakim\Paystack\Api\Customer;
+use MusheAbdulHakim\Paystack\Api\Terminal;
+use MusheAbdulHakim\Paystack\Api\Transfer;
 use MusheAbdulHakim\Paystack\Api\Settlement;
 use MusheAbdulHakim\Paystack\Api\SubAccount;
-use MusheAbdulHakim\Paystack\Api\Subscription;
-use MusheAbdulHakim\Paystack\Api\Terminal;
+use MusheAbdulHakim\Paystack\Api\PaymentPage;
 use MusheAbdulHakim\Paystack\Api\Transaction;
-use MusheAbdulHakim\Paystack\Api\TransactionSplit;
+use MusheAbdulHakim\Paystack\Api\Subscription;
+use MusheAbdulHakim\Paystack\Api\PaymentRequest;
 use MusheAbdulHakim\Paystack\Api\VirtualAccount;
-use MusheAbdulHakim\Paystack\Contracts\PaystackClientInterface;
+use MusheAbdulHakim\Paystack\Api\TransactionSplit;
+use MusheAbdulHakim\Paystack\Api\TransferControl;
+use MusheAbdulHakim\Paystack\Api\TransferRecipient;
 use MusheAbdulHakim\Paystack\Contracts\TransporterContract;
+use MusheAbdulHakim\Paystack\Contracts\PaystackClientInterface;
 
 final readonly class Client implements PaystackClientInterface
 {
@@ -95,6 +98,22 @@ final readonly class Client implements PaystackClientInterface
     public function settlement(): Settlement
     {
         return new Settlement($this->transporter);
+    }
+
+
+    public function transferRecipient(): TransferRecipient
+    {
+        return new TransferRecipient($this->transporter);
+    }
+
+    public function transfer(): Transfer
+    {
+        return new Transfer($this->transporter);
+    }
+
+    public function transferControl(): TransferControl
+    {
+        return new TransferControl($this->transporter);
     }
 
 }
