@@ -25,7 +25,7 @@ class PaystackServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '../Config/paystack.php' => config_path('paystack.php'),
+            __DIR__ . '/../Config/paystack.php' => config_path('paystack.php'),
         ]);
     }
 
@@ -35,7 +35,7 @@ class PaystackServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '../Config/paystack.php',
+            __DIR__ . '/../Config/paystack.php',
             'paystack'
         );
     }
