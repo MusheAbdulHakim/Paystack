@@ -10,22 +10,34 @@ use Musheabdulhakim\Paystack\Facades\PaystackFacade;
 class PaystackServiceProvider extends ServiceProvider
 {
     /**
-     * The paths that should be published.
-     *
-     * @var array
-     */
-    public static $publishes = [
-        __DIR__ . '/Config/paystack.php' => config_path('paystack.php'),
-    ];
-
-    /**
      * Determine if the provider is deferred.
      *
      * @return bool
      */
     public function isDeferred()
     {
-        return false;
+        return true;
+    }
+
+    /**
+     * Bootstrap any package services.
+     */
+    public function boot(): void
+    {
+        $this->publishes([
+            __DIR__ . '../Config/paystack.php' => config_path('paystack.php'),
+        ]);
+    }
+
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        $this->mergeConfigFrom(
+            __DIR__ . '../Config/paystack.php',
+            'paystack'
+        );
     }
 
 
