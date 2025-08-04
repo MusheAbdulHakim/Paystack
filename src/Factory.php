@@ -66,6 +66,7 @@ final class Factory
     public function withPublicKey(string $publicKey): self
     {
         $this->publicKey = trim($publicKey);
+
         return $this;
     }
 
@@ -157,7 +158,6 @@ final class Factory
     {
         $headers = Headers::create();
 
-
         $headers = Headers::withAuthorization(ApiKey::from(
             $this->secretKey !== null && $this->secretKey !== '' && $this->secretKey !== '0' ? $this->secretKey : ''
         ));
@@ -169,7 +169,6 @@ final class Factory
         $baseUri = BaseUri::from(
             $this->baseUri !== null && $this->baseUri !== '' && $this->baseUri !== '0' ? $this->baseUri : 'https://api.paystack.co',
         );
-
 
         $queryParams = QueryParams::create();
         foreach ($this->queryParams as $name => $value) {
