@@ -13,12 +13,12 @@ class TestCase extends FrameworkTestCase
         parent::__construct();
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

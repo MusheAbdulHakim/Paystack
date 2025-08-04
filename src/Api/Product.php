@@ -14,19 +14,22 @@ final class Product implements ProductContract
 
     public function create(array $params = []): array|string
     {
-        $payload = Payload::post("product", $params);
+        $payload = Payload::post('product', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function list(array $params = []): array|string
     {
-        $payload = Payload::get("product", $params);
+        $payload = Payload::get('product', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function fetch(string $id): array|string
     {
         $payload = Payload::get("product/$id");
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -34,6 +37,7 @@ final class Product implements ProductContract
     {
 
         $payload = Payload::put("product/$id", $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 }

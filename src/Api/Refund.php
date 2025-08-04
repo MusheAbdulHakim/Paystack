@@ -12,19 +12,19 @@ final class Refund implements RefundContract
 {
     use Transportable;
 
-
     public function create(string $transaction, array $params = []): array|string
     {
         $params['transaction'] = $transaction;
-        $payload = Payload::post("refund", $params);
+        $payload = Payload::post('refund', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
-
 
     public function list(string $transaction, array $params = []): array|string
     {
         $params['transaction'] = $transaction;
-        $payload = Payload::get("refund", $params);
+        $payload = Payload::get('refund', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -32,7 +32,7 @@ final class Refund implements RefundContract
     {
 
         $payload = Payload::get("refund/$id");
+
         return $this->transporter->requestObject($payload)->data();
     }
-
 }

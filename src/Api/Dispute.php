@@ -14,51 +14,57 @@ final class Dispute implements DisputeContract
 
     public function list(array $params = []): array|string
     {
-        $payload = Payload::get("dispute", $params);
+        $payload = Payload::get('dispute', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
-
 
     public function fetch(string $id): array|string
     {
         $payload = Payload::get("dispute/$id");
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function transactions(string $id): array|string
     {
         $payload = Payload::get("dispute/transaction/$id");
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function update(string $id, array $params = []): array|string
     {
         $payload = Payload::put("dispute/$id", $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function evidence(string $id, array $params = []): array|string
     {
         $payload = Payload::post("dispute/$id/evidence", $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function uploadUrl(string $id, array $params = []): array|string
     {
         $payload = Payload::get("dispute/$id/upload_url", $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function resolve(string $id, array $params): array|string
     {
         $payload = Payload::put("dispute/$id/resolve", $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function export(array $params = []): array|string
     {
-        $payload = Payload::get("dispute/export", $params);
+        $payload = Payload::get('dispute/export', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
-
 }

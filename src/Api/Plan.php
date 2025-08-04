@@ -14,25 +14,29 @@ final class Plan implements PlanContract
 
     public function create(array $params = []): array|string
     {
-        $payload = Payload::post("plan", $params);
+        $payload = Payload::post('plan', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function list(array $params = []): array|string
     {
-        $payload = Payload::get("plan", $params);
+        $payload = Payload::get('plan', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function fetch(string $id): array|string
     {
         $payload = Payload::get("plan/$id");
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function update(string $id, array $params = []): array|string
     {
         $payload = Payload::put("plan/$id", $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 }

@@ -7,8 +7,9 @@ interface TransactionSplitContract
     /**
      * Create Split
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/split/#create
      */
     public function create(array $params = []): array|string;
@@ -16,8 +17,9 @@ interface TransactionSplitContract
     /**
      * List Split
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/split/#list
      */
     public function list(array $params = []): array|string;
@@ -26,6 +28,7 @@ interface TransactionSplitContract
      * Fetch Split
      *
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/split/#fetch
      */
     public function fetch(string $reference): array|string;
@@ -33,8 +36,9 @@ interface TransactionSplitContract
     /**
      * Update Split
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/split/#update
      */
     public function update(string $id, array $params = []): array|string;
@@ -42,8 +46,9 @@ interface TransactionSplitContract
     /**
      * Add/Update Subaccount Split
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/split/#add-subaccount
      */
     public function addSubAccount(string $id, array $params = []): array|string;
@@ -51,8 +56,9 @@ interface TransactionSplitContract
     /**
      * Remove Subaccount from Split
      *
-     * @param array<string> $params
+     * @param  array<string>  $params
      * @return array<mixed>|string
+     *
      * @see Remove Subaccount from Split
      */
     public function removeSubAccount(string $id, array $params = []): array|string;

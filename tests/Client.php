@@ -1,15 +1,15 @@
 <?php
 
 use MusheAbdulHakim\Paystack\Api\ApplePay;
-use MusheAbdulHakim\Paystack\Paystack;
 use MusheAbdulHakim\Paystack\Api\Customer;
 use MusheAbdulHakim\Paystack\Api\Plan;
 use MusheAbdulHakim\Paystack\Api\SubAccount;
 use MusheAbdulHakim\Paystack\Api\Subscription;
 use MusheAbdulHakim\Paystack\Api\Terminal;
 use MusheAbdulHakim\Paystack\Api\Transaction;
-use MusheAbdulHakim\Paystack\Api\VirtualAccount;
 use MusheAbdulHakim\Paystack\Api\TransactionSplit;
+use MusheAbdulHakim\Paystack\Api\VirtualAccount;
+use MusheAbdulHakim\Paystack\Paystack;
 
 test('has transactions', function () {
     $transaction = Paystack::client('foo')->transaction();
@@ -40,7 +40,6 @@ test('has apple pay', function () {
     $transaction = Paystack::client('foo')->applePay();
     expect($transaction)->toBeInstanceOf(ApplePay::class);
 });
-
 
 test('has sub account', function () {
     $transaction = Paystack::client('foo')->subAccount();

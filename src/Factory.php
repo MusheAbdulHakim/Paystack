@@ -21,22 +21,21 @@ use Psr\Http\Message\ResponseInterface;
 final class Factory
 {
     /**
-    * The base URI for the requests.
-    */
-    private ?string $baseUri = null;
-
+     * The base URI for the requests.
+     */
+    private ?string $baseUri = 'https://api.paystack.co';
 
     /**
      * The API key for the requests.
      */
     private ?string $secretKey = null;
 
+    private ?string $publicKey = null;
 
     /**
      * The HTTP client for the requests.
      */
     private ?ClientInterface $httpClient = null;
-
 
     /**
      * The HTTP headers for the requests.
@@ -64,7 +63,11 @@ final class Factory
         return $this;
     }
 
-
+    public function withPublicKey(string $publicKey): self
+    {
+        $this->publicKey = trim($publicKey);
+        return $this;
+    }
 
     /**
      * Sets the base URI for the requests.
@@ -77,8 +80,6 @@ final class Factory
         return $this;
     }
 
-
-
     /**
      * Sets the HTTP client for the requests.
      * If no client is provided the factory will try to find one using PSR-18 HTTP Client Discovery.
@@ -90,7 +91,6 @@ final class Factory
         return $this;
     }
 
-
     /**
      * Sets the stream handler for the requests. Not required when using Guzzle.
      */
@@ -100,7 +100,6 @@ final class Factory
 
         return $this;
     }
-
 
     /**
      * Adds a custom HTTP header to the requests.
@@ -158,10 +157,9 @@ final class Factory
     {
         $headers = Headers::create();
 
-        $config = new Config();
 
         $headers = Headers::withAuthorization(ApiKey::from(
-            $this->secretKey !== null && $this->secretKey !== '' && $this->secretKey !== '0' ? $this->secretKey : $config->get('PAYSTACK_SECRET_KEY')
+            $this->secretKey !== null && $this->secretKey !== '' && $this->secretKey !== '0' ? $this->secretKey : ''
         ));
 
         foreach ($this->headers as $name => $value) {
@@ -169,8 +167,9 @@ final class Factory
         }
 
         $baseUri = BaseUri::from(
-            $this->baseUri !== null && $this->baseUri !== '' && $this->baseUri !== '0' ? $this->baseUri : $config->get('PAYSTACK_API_URI'),
+            $this->baseUri !== null && $this->baseUri !== '' && $this->baseUri !== '0' ? $this->baseUri : 'https://api.paystack.co',
         );
+
 
         $queryParams = QueryParams::create();
         foreach ($this->queryParams as $name => $value) {
@@ -179,7 +178,6 @@ final class Factory
         $client = $this->httpClient ??= Psr18ClientDiscovery::find();
 
         $sendAsync = $this->makeStreamHandler($client);
-
 
         $transporter = new HttpTransporter($client, $baseUri, $headers, $queryParams, $sendAsync);
 

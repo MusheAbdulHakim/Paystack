@@ -16,7 +16,8 @@ final class Charge implements ChargeContract
     {
         $params['email'] = $email;
         $params['amount'] = $amount;
-        $payload = Payload::post("charge", $params);
+        $payload = Payload::post('charge', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -24,7 +25,8 @@ final class Charge implements ChargeContract
     {
         $params['pin'] = $pin;
         $params['reference'] = $reference;
-        $payload = Payload::post("charge/submit_pin", $params);
+        $payload = Payload::post('charge/submit_pin', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -33,7 +35,8 @@ final class Charge implements ChargeContract
 
         $params['otp'] = $otp;
         $params['reference'] = $reference;
-        $payload = Payload::post("charge/submit_otp", $params);
+        $payload = Payload::post('charge/submit_otp', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -41,7 +44,8 @@ final class Charge implements ChargeContract
     {
         $params['phone'] = $phone;
         $params['reference'] = $reference;
-        $payload = Payload::post("charge/submit_phone", $params);
+        $payload = Payload::post('charge/submit_phone', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -49,19 +53,22 @@ final class Charge implements ChargeContract
     {
         $params['birthday'] = $birthday;
         $params['reference'] = $reference;
-        $payload = Payload::post("charge/submit_birthday", $params);
+        $payload = Payload::post('charge/submit_birthday', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function submitAddress(array $params = []): array|string
     {
-        $payload = Payload::post("charge/submit_address", $params);
+        $payload = Payload::post('charge/submit_address', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function checkPending(string $reference): array|string
     {
         $payload = Payload::get("charge/$reference");
+
         return $this->transporter->requestObject($payload)->data();
     }
 }

@@ -13,7 +13,7 @@ final class ErrorException extends Exception
      */
     public function __construct(private readonly array $contents)
     {
-        //@phpstan-ignore-next-line
+        // @phpstan-ignore-next-line
         $message = ($contents['message'] ?: (string) $this->contents['code']) ?: 'Unknown error';
 
         if (is_array($message)) {
