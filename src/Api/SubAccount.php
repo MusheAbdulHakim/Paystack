@@ -14,13 +14,15 @@ final class SubAccount implements SubAccountContract
 
     public function create(array $params = []): array|string
     {
-        $payload = Payload::post("subaccount", $params);
+        $payload = Payload::post('subaccount', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function list(array $params = []): array|string
     {
-        $payload = Payload::get("subaccount", $params);
+        $payload = Payload::get('subaccount', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -28,12 +30,14 @@ final class SubAccount implements SubAccountContract
     {
 
         $payload = Payload::get("subaccount/$id");
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function update(string $id, array $params = []): array|string
     {
         $payload = Payload::put("subaccount/$id", $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 }

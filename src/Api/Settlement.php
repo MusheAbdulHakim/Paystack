@@ -14,7 +14,8 @@ final class Settlement implements SettlementContract
 
     public function list(array $params = []): array|string
     {
-        $payload = Payload::get("settlement", $params);
+        $payload = Payload::get('settlement', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -22,6 +23,7 @@ final class Settlement implements SettlementContract
     {
 
         $payload = Payload::get("settlement/$id/transactions", $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 }

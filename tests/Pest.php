@@ -1,15 +1,15 @@
 <?php
 
+use Mockery;
 use MusheAbdulHakim\Paystack\Client;
-use Psr\Http\Message\ResponseInterface;
 use MusheAbdulHakim\Paystack\Contracts\TransporterContract;
 use MusheAbdulHakim\Paystack\ValueObjects\Transporter\ApiKey;
 use MusheAbdulHakim\Paystack\ValueObjects\Transporter\BaseUri;
 use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Headers;
 use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Payload;
-use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Response;
 use MusheAbdulHakim\Paystack\ValueObjects\Transporter\QueryParams;
-use Mockery;
+use MusheAbdulHakim\Paystack\ValueObjects\Transporter\Response;
+use Psr\Http\Message\ResponseInterface;
 
 function mockClient(string $method, string $endpoint, array $params, Response|ResponseInterface|string $response, $methodName = 'requestObject', bool $validateParams = true)
 {
@@ -26,7 +26,7 @@ function mockClient(string $method, string $endpoint, array $params, Response|Re
             $request = $payload->toRequest($baseUri, $headers, $queryParams);
 
             if ($validateParams) {
-                if (in_array($method, ['GET','POST','PUT', 'DELETE'])) {
+                if (in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])) {
                     if ($request->getUri()->getQuery() !== http_build_query($params)) {
                         return false;
                     }

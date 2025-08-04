@@ -11,6 +11,4 @@ use Exception as CoreException;
  *
  * @author  Mushe Abdul-Hakim  <musheabdulhakim99@gmail.com>
  */
-class Exception extends CoreException
-{
-}
+class Exception extends CoreException {}

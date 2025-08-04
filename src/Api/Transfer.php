@@ -14,7 +14,8 @@ final class Transfer implements TransferContract
 
     public function init(array $params = []): array|string
     {
-        $payload = Payload::post("transfer", $params);
+        $payload = Payload::post('transfer', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -23,7 +24,8 @@ final class Transfer implements TransferContract
 
         $params['transfer_code'] = $code;
         $params['otp'] = $otp;
-        $payload = Payload::post("transfer/finalize_transfer", $params);
+        $payload = Payload::post('transfer/finalize_transfer', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
@@ -31,25 +33,29 @@ final class Transfer implements TransferContract
     {
         $params['source'] = $source;
         $params['transfers'] = $transfers;
-        $payload = Payload::post("transfer/bulk", $params);
+        $payload = Payload::post('transfer/bulk', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function list(array $params = []): array|string
     {
-        $payload = Payload::get("transfer", $params);
+        $payload = Payload::get('transfer', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function fetch(string $id): array|string
     {
         $payload = Payload::get("transfer/$id");
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function verify(string $reference): array|string
     {
         $payload = Payload::get("transfer/verify/$reference");
+
         return $this->transporter->requestObject($payload)->data();
     }
 }

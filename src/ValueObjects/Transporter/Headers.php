@@ -50,7 +50,6 @@ final readonly class Headers
         ]);
     }
 
-
     /**
      * Creates a new Headers value object, with the newly added header, and the existing headers.
      */

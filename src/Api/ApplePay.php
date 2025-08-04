@@ -13,16 +13,17 @@ final class ApplePay implements ApplePayContract
     public function register(string $domain): array|string
     {
         $params['domainName'] = $domain;
-        $payload = Payload::post("apple-pay/domain", $params);
+        $payload = Payload::post('apple-pay/domain', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
 
     public function list(array $params = []): array|string
     {
-        $payload = Payload::get("apple-pay/domain", $params);
+        $payload = Payload::get('apple-pay/domain', $params);
+
         return $this->transporter->requestObject($payload)->data();
     }
-
 
     public function unregister(string $domain): array|string
     {
@@ -30,9 +31,10 @@ final class ApplePay implements ApplePayContract
         $payload = Payload::custom(
             \MusheAbdulHakim\Paystack\Enums\Transporter\Method::DELETE,
             \MusheAbdulHakim\Paystack\Enums\Transporter\ContentType::JSON,
-            "apple-pay/domain",
+            'apple-pay/domain',
             $params
         );
+
         return $this->transporter->requestObject($payload)->data();
     }
 }

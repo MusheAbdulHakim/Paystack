@@ -9,7 +9,7 @@ interface SettlementContract
     /**
      * List Settlements
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
      */
     public function list(array $params = []): array|string;
@@ -17,8 +17,8 @@ interface SettlementContract
     /**
      * List Settlement Transactions
      *
-     * @param string $id The settlement ID in which you want to fetch its transactions
-     * @param array<mixed> $params
+     * @param  string  $id  The settlement ID in which you want to fetch its transactions
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
      */
     public function transactions(string $id, array $params = []): array|string;

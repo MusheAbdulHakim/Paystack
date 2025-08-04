@@ -19,7 +19,6 @@ final readonly class BaseUri implements StringableContract
         // ..
     }
 
-
     /**
      * Creates a new Base URI value object.
      */

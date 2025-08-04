@@ -12,81 +12,222 @@
 
 
 ------
-This package provides a wonderful **PHP** client that allows you to interact
-with [Paystack Api](https://paystack.com/docs)
-
-**This SDK** is a PHP & Laravel Package, (Designed to help working with paystack api easier and faster).
-
 
 ## Requirement
 > **Requires [Composer](https://getcomposer.org/)**
 > **Requires [PHP 8.2+](https://php.net/releases/)**
+# Paystack PHP SDK
+
+A robust, fluent and object-oriented PHP SDK for the [Paystack API](https://paystack.com/docs), designed for ease of use and extensibility.
+
+---
 
 
+## Table of Contents
 
-<a name="Installation"></a>
+* [Introduction](#introduction)
+* [Key Features](#key-features)
+* [Installation](#installation)
+* [Quick Start](#quick-start)
+* [API Reference](#api-reference)
+* [Extending the SDK](#extending-the-sdk)
+* [Contributing](#contributing)
+* [License](#license)
+
+---
+
+## Introduction
+
+The SDK provides a comprehensive and intuitive way to interact with the [Paystack API](https://paystack.com/docs/api/). Designed with developer experience in mind, it offers a fluent, object-oriented interface to various Paystack endpoints, making payment integration seamless and efficient for your PHP applications.
+
+This SDK supports a wide array of Paystack services, including:
+
+* **Transactions:** Initialize, verify, list, fetch, charge authorizations, refunds, and more.
+* **Customers:** Manage customer records, including creation, updates, and identity validation.
+* **Transfers:** Facilitate single and bulk transfers to bank accounts and mobile money wallets.
+* **Subscriptions:** Handle recurring payments by managing plans and customer subscriptions.
+* **Dedicated Accounts (Virtual Accounts):** Create and manage unique bank accounts for customers.
+* **Transaction Splits:** Automatically divide payments among multiple recipients.
+* **Terminals:** Interact with physical Paystack POS devices.
+* **Disputes:** Manage and resolve chargebacks effectively.
+* **Miscellaneous:** Access general data like lists of banks, countries, and states.
+
+---
+
+## Key Features
+
+* **Fluent API:** Enjoy a clean and readable codebase with chained method calls (e.g., `client()->transaction()->initialize(...)`).
+* **Object-Oriented Design:** Paystack API endpoints are encapsulated into dedicated classes for better organization and maintainability.
+* **PSR-18 HTTP Client Support:** Leverage any PSR-18 compatible HTTP client for flexible and robust request handling.
+* **Strong Typing:** Benefits from PHP's type hints for enhanced code quality and improved IDE support.
+* **Extensible Architecture:** Designed for easy extension, allowing you to add custom transporters or build new API modules.
+
+---
+
 ## Installation
 
-```bash
- composer require musheabdulhakim/paystack
-```
+The easiest way to install the Paystack PHP SDK is via Composer:
 
-## Basic usage
+```bash
+composer require musheabdulhakim/paystack
+````
+
+-----
+
+## Quick Start
+
+To get started, initialize the Paystack client with your secret key. You can then immediately begin interacting with any available Paystack API endpoint.
+
+#### Simple Initialization
 
 ```php
+<?php
+
+require 'vendor/autoload.php';
 
 use MusheAbdulHakim\Paystack\Paystack;
 
-$paystack = Paystack::client('your-api-key');
+// Replace with your actual Paystack secret key
+$secretKey = 'sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
-//or 
+// Initialize the Paystack client
+$client = Paystack::client($secretKey);
 
-$paystack = Paystack::client('secret-api-key','https://api.paystack.co');
+// Example: Initialize a new transaction
+try {
+    $response = $client->transaction()->initialize([
+        'amount' => 500000, // Amount in kobo (e.g., NGN 5000.00)
+        'email' => 'customer@example.com',
+        'callback_url' => '[https://yourwebsite.com/verify-payment](https://yourwebsite.com/verify-payment)',
+    ]);
+
+    echo "Transaction initialized successfully! Authorization URL: " . $response['authorization_url'] . "\n";
+} catch (\Exception $e) {
+    echo "Error initializing transaction: " . $e->getMessage() . "\n";
+}
+
+// Example: List all customers
+try {
+    $customers = $client->customer()->list(['perPage' => 5]);
+    echo "Customers:\n";
+    print_r($customers);
+} catch (\Exception $e) {
+    echo "Error listing customers: " . $e->getMessage() . "\n";
+}
+
+?>
 ```
 
-### Example
+#### Advanced Initialization with Factory
+
+For more granular control over the underlying HTTP client, base URI, or default headers, use the `Paystack::factory()` method. This is useful for advanced scenarios like proxying requests, custom logging, or integrating with a specific PSR-18 client implementation (e.g., Guzzle).
+
 ```php
+<?php
 
+require 'vendor/autoload.php';
 
-$customers = $paystack->customer()->list();
+use MusheAbdulHakim\Paystack\Paystack;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
-$initialize_transaction = $paystack->transaction()->initialize([
-    //
-]);
+// Replace with your actual Paystack secret key
+$secretKey = 'sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
+// Example of a dummy PSR-18 HTTP Client (replace with a real implementation like Guzzle)
+class MyCustomHttpClient implements ClientInterface {
+    public function sendRequest(\Psr\Http\Message\RequestInterface $request): \Psr\Http\Message\ResponseInterface {
+        // Dummy response for demonstration
+        return new \GuzzleHttp\Psr7\Response(200, [], '{"status": true, "message": "Custom client response"}');
+    }
+}
 
+// Example of a dummy PSR-17 Request Factory
+class MyCustomRequestFactory implements RequestFactoryInterface {
+    public function createRequest(string $method, \Psr\Http\Message\UriInterface|string $uri): \Psr\Http\Message\RequestInterface {
+        return new \GuzzleHttp\Psr7\Request($method, $uri);
+    }
+}
+
+// Example of a dummy PSR-17 Stream Factory
+class MyCustomStreamFactory implements StreamFactoryInterface {
+    public function createStream(string $content = ''): \Psr\Http\Message\StreamInterface {
+        return \GuzzleHttp\Psr7\Utils::streamFor($content);
+    }
+}
+
+$client = Paystack::factory()
+    ->withSecretKey($secretKey)
+    ->withBaseUri('[https://api.paystack.com/](https://api.paystack.com/)') // Set a custom base URI
+    ->withHeaders([ // Add default headers to all requests
+        'X-Custom-Header' => 'My-App-Identifier',
+        'User-Agent' => 'MyCustomPaystackClient/1.0',
+    ])
+    ->withQueryParameters(['perPage' => 50]) // Add default query parameters
+    ->withHttpClient(new MyCustomHttpClient()) // Provide your custom HTTP client
+    ->withRequestFactory(new MyCustomRequestFactory()) // Provide your custom request factory
+    ->withStreamFactory(new MyCustomStreamFactory()) // Provide your custom stream factory
+    ->make();
+
+// Now, all requests made through $client will use your custom configurations.
+try {
+    $response = $client->miscellaneous()->banks(['country' => 'nigeria']);
+    echo "Nigerian Banks (via custom client):\n";
+    print_r($response);
+} catch (\Exception $e) {
+    echo "Error fetching banks: " . $e->getMessage() . "\n";
+}
+
+?>
 ```
 
-##### Refer to the documentation [here](https://musheabdulhakim.github.io/Paystack/)
+-----
 
-### Configuration
+## API Reference
 
-```php
+The SDK is structured with dedicated classes for each major Paystack API resource, providing clear and organized access to their respective methods. Click on the links below to view detailed documentation and sample code for each class.
 
-    'PAYSTACK_API_URI' => 'https://api.paystack.co',
+  * **[Apple Pay](./docs/ApplePay.md)**: Manage Apple Pay domains (register, list, unregister).
+  * **[Bulk Charges](./docs/BulkCharge.md)**: Initiate, list, fetch, pause, and resume bulk charge operations.
+  * **[Charges](./docs/Charge.md)**: Directly charge customers, handle authentication steps (PIN, OTP, etc.), and check pending charge status.
+  * **[Customers](./docs/Customer.md)**: Create, list, fetch, update, validate customer details, and manage risk actions.
+  * **[Disputes](./docs/Dispute.md)**: List, fetch, update, resolve disputes, and upload/manage evidence.
+  * **[Integration](./docs/Integration.md)**: Fetch and update payment session timeout settings.
+  * **[Miscellaneous](./docs/Miscellaneous.md)**: Retrieve lists of banks, countries, and states.
+  * **[Payment Pages](./docs/PaymentPage.md)**: Create, list, fetch, update payment pages, check slug availability, and add products.
+  * **[Payment Requests](./docs/PaymentRequest.md)**: Create, list, fetch, verify, notify, finalize, update, and archive payment requests (invoices).
+  * **[Plans](./docs/Plan.md)**: Create, list, fetch, and update subscription plans.
+  * **[Products](./docs/Product.md)**: Create, list, fetch, and update products.
+  * **[Refunds](./docs/Refund.md)**: Create, list, and fetch details of refunds for transactions.
+  * **[Settlements](./docs/Settlement.md)**: List settlements and retrieve transactions associated with them.
+  * **[Subaccounts](./docs/SubAccount.md)**: Create, list, fetch, and update subaccounts for splitting payments.
+  * **[Subscriptions](./docs/Subscription.md)**: Create, list, fetch, enable, disable subscriptions, and generate/send management links.
+  * **[Terminals](./docs/Terminal.md)**: Send events to terminals, check event status, get terminal presence, list, fetch, update, commission, and decommission devices.
+  * **[Transactions](./docs/Transaction.md)**: Initialize, verify, list, fetch transactions, charge authorizations, view timelines, get totals, export data, and perform partial debits.
+  * **[Transaction Splits](./docs/TransactionSplit.md)**: Create, list, fetch, update transaction splits, and manage subaccounts within a split.
+  * **[Transfers](./docs/Transfer.md)**: Initiate single and bulk transfers, finalize transfers with OTP, list, fetch, and verify status.
+  * **[Transfer Control](./docs/TransferControl.md)**: Retrieve account balance and ledger, and manage OTP settings for transfers.
+  * **[Transfer Recipients](./docs/TransferRecipient.md)**: Create single and bulk transfer recipients, list, fetch, update, and delete them.
+  * **[Verifications](./docs/Verification.md)**: Resolve bank accounts, validate bank accounts, and resolve card BINs.
+  * **[Virtual Accounts](./docs/VirtualAccount.md)**: Create, assign, list, fetch, requery, deactivate virtual accounts, manage split transactions, and retrieve bank providers.
 
-    'PAYSTACK_SECRET_KEY' => '',
+-----
 
-    'PAYSTACK_PUBLIC_KEY' => '',
-```
+## Extending the SDK
 
+The SDK is built with extensibility at its core. If you need to customize how HTTP requests are sent (e.g., for specific logging, advanced error handling, or integrating with a custom HTTP client not directly supported by PSR-18), you can implement your own `Transporter` and provide it to the `Factory`. This allows you to tailor the SDK's behavior to your exact needs.
 
+You can also easily add new API modules if Paystack introduces new endpoints not yet covered by the SDK, or if you wish to group specific functionalities into your own custom classes.
 
-## Contribution
+-----
 
+## Contributing
 
-🧹 Keep a modern codebase with **php-cs-fixer**:
+We welcome contributions to the Paystack PHP SDK\! Whether it's bug reports, feature requests, or pull requests, your input is valuable. Please refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) file (if available) for guidelines on how to contribute.
 
-```bash
-composer lint
-```
+-----
 
-🚀 Run the entire test suite:
+## License
 
-```bash
-composer test
-```
-
-Report all your issues [Here](https://github.com/MusheAbdulHakim/Paystack/issues)
-
-All your pull requests are welcome :). 
+This Paystack PHP SDK is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

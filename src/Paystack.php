@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MusheAbdulHakim\Paystack;
 
-class Paystack
+final class Paystack
 {
     /**
      * Initialize the client factory.
@@ -17,7 +17,7 @@ class Paystack
             ->withSecretKey($secretKey);
     }
 
-    public static function client(string $secretKey, string $baseUri = ''): Client
+    public static function client(string $secretKey, ?string $baseUri = ''): Client
     {
         return self::factory()
             ->withBaseUri($baseUri)

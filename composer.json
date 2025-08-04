@@ -1,5 +1,5 @@
 {
-    "name": "musheabdulhakim/paystack",
+  "name": "musheabdulhakim/paystack",
   "description": "PHP & Laravel package, that makes working with Paystack api a breeze.",
   "license": "MIT",
   "keywords": [
@@ -19,65 +19,60 @@
       "role": "Developer"
     }
   ],
-    "require": {
-        "php": "^8.2|^8.3|^8.4",
-        "illuminate/config": "^11.36",
-        "php-http/discovery": "^1.20",
-        "php-http/multipart-stream-builder": "^1.4",
-        "psr/http-client": "^1.0",
-        "psr/http-client-implementation": "*",
-        "psr/http-factory-implementation": "*",
-        "psr/http-message": "^2.0"
-    },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.65",
-        "guzzlehttp/guzzle": "^7.9",
-        "guzzlehttp/psr7": "^2.7",
-        "mockery/mockery": "^1.6",
-        "pestphp/pest": "^3.7",
-        "pestphp/pest-plugin-arch": "^3.0",
-        "pestphp/pest-plugin-type-coverage": "^3.2",
-        "phpstan/phpstan": "^1.12",
-        "rector/rector": "^1.2",
-        "symfony/var-dumper": "^6.4.0|^7.2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "MusheAbdulHakim\\Paystack\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "MusheAbdulHakim\\Paystack\\Tests\\": "tests"
-        }
-    },
-    "config": {
-        "sort-packages": true,
-        "preferred-install": "dist",
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "php-http/discovery": false
-        }
-    },
-    "scripts": {
-        "lint": "php-cs-fixer fix .",
-        "test:lint": "php-cs-fixer fix . --dry-run",
-        "refacto": "rector",
-        "test:refacto": "rector",
-        "test:types": "phpstan analyse --ansi",
-        "test:unit": "pest --colors=always",
-        "test": ["@test:lint", "@test:refacto", "@test:types", "@test:unit"]
-    },
-    "extra": {
-        "laravel": {
-          "providers": [
-            "Musheabdulhakim\\Paystack\\ServiceProviders\\PaystackServiceProvider"
-          ],
-          "aliases": {
-            "Paystack": "Musheabdulhakim\\Paystack\\Facades\\Paystack"
-          }
-        }
-      },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+  "require": {
+    "php": "^8.2|^8.3|^8.4",
+    "illuminate/config": "^11.36",
+    "php-http/discovery": "^1.20",
+    "php-http/multipart-stream-builder": "^1.4",
+    "psr/http-client": "^1.0",
+    "psr/http-client-implementation": "*",
+    "psr/http-factory-implementation": "*",
+    "psr/http-message": "^2.0"
+  },
+  "require-dev": {
+    "guzzlehttp/guzzle": "^7.9",
+    "guzzlehttp/psr7": "^2.7",
+    "laravel/pint": "^1.24",
+    "mockery/mockery": "^1.6",
+    "pestphp/pest": "^3.8",
+    "pestphp/pest-plugin-arch": "^3.1",
+    "pestphp/pest-plugin-type-coverage": "^3.6",
+    "phpstan/phpstan": "^2.1",
+    "rector/rector": "^2.1",
+    "symfony/var-dumper": "^7.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "MusheAbdulHakim\\Paystack\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "php-http/discovery": false
+    }
+  },
+  "scripts": {
+    "lint": "pint",
+    "test:lint": "pint --test",
+    "refacto": "rector",
+    "test:refacto": "rector",
+    "test:types": "phpstan analyse --ansi",
+    "test:unit": "pest --colors=always",
+    "test": [
+      "@test:lint",
+      "@test:refacto",
+      "@test:types",
+      "@test:unit"
+    ]
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }

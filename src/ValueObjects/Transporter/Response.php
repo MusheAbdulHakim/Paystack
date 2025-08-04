@@ -12,7 +12,7 @@ final readonly class Response
     /**
      * Creates a new Response value object.
      *
-     * @param array<mixed>|string $data
+     * @param  array<mixed>|string  $data
      */
     private function __construct(
         private array|string $data
@@ -24,7 +24,7 @@ final readonly class Response
      * Creates a new Response value object from the given data.
      *
      *
-     * @param array<mixed>|string $data
+     * @param  array<mixed>|string  $data
      */
     public static function from(array|string $data): self
     {

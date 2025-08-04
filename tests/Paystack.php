@@ -30,11 +30,10 @@ it('may create client via init method', function () {
     expect($paystack)->toBeInstanceOf(Client::class);
 });
 
-
 it('may set custom http client', function () {
     $paystack = Paystack::init('foot')
-                ->withHttpClient(new GuzzleHttpClient())
-                ->make();
+        ->withHttpClient(new GuzzleHttpClient())
+        ->make();
     expect($paystack)->toBeInstanceOf(Client::class);
 });
 
@@ -45,14 +44,14 @@ it('sets api url', function () {
 
 it('set custom headers', function () {
     $paystack = Paystack::init('foo')
-       ->withHttpHeader('custom-Header', 'foo')
-       ->make();
+        ->withHttpHeader('custom-Header', 'foo')
+        ->make();
     expect($paystack)->toBeInstanceOf(Client::class);
 });
 
 it('set custom query parameters', function () {
     $paystack = Paystack::init('foo')
-       ->withQueryParam('param1', 'value')
-       ->make();
+        ->withQueryParam('param1', 'value')
+        ->make();
     expect($paystack)->toBeInstanceOf(Client::class);
 });

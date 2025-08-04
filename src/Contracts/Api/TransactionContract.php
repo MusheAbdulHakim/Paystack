@@ -7,8 +7,9 @@ interface TransactionContract
     /**
      * Initialize Transaction
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/transaction/#initialize
      */
     public function initialize(array $params = []): array|string;
@@ -17,22 +18,22 @@ interface TransactionContract
      * Verify Transaction
      *
      * @return array<mixed>|string
-     * https://paystack.com/docs/api/transaction/#verify
+     *                             https://paystack.com/docs/api/transaction/#verify
      */
     public function verify(string $reference): array|string;
 
     /**
      * List Transaction
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
-     * https://paystack.com/docs/api/transaction/#list
+     *                             https://paystack.com/docs/api/transaction/#list
      */
     public function list(array $params = []): array|string;
 
-
     /**
      * Fetch Transaction
+     *
      * @return array<mixed>|string
      */
     public function fetch(int $id): array|string;
@@ -40,8 +41,9 @@ interface TransactionContract
     /**
      * Charge Authorization
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/transaction/#charge-authorization
      */
     public function chargeAuth(array $params = []): array|string;
@@ -50,6 +52,7 @@ interface TransactionContract
      * View Transaction Timeline
      *
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/transaction/#view-timeline
      */
     public function view(string $id): array|string;
@@ -57,8 +60,9 @@ interface TransactionContract
     /**
      * Transaction Totals
      *
-     * @param array<string> $params
+     * @param  array<string>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/transaction/#totals
      */
     public function totals(array $params = []): array|string;
@@ -66,16 +70,19 @@ interface TransactionContract
     /**
      * Export Transaction
      *
-     * @param array<mixed> $params
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/transaction/#export
      */
     public function export(array $params = []): array|string;
 
     /**
      * Partial Debit
-     * @param array<mixed> $params
+     *
+     * @param  array<mixed>  $params
      * @return array<mixed>|string
+     *
      * @see https://paystack.com/docs/api/transaction/#partial-debit
      */
     public function partialDebit(array $params = []): array|string;
