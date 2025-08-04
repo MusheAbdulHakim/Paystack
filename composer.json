@@ -21,7 +21,6 @@
   ],
   "require": {
     "php": "^8.2|^8.3|^8.4",
-    "illuminate/config": "^11.36",
     "php-http/discovery": "^1.20",
     "php-http/multipart-stream-builder": "^1.4",
     "psr/http-client": "^1.0",
