@@ -138,4 +138,4 @@ if ($subscriptionCode && $emailToken) {
     echo "\nSkipping subscription-specific operations as no valid subscription code/token was obtained.\n";
 }
 
-?>
+?>```

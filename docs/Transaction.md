@@ -207,4 +207,4 @@ if ($authorizationCode && $sampleCustomerEmail) {
     echo "\nSkipping partial debit as no valid authorization code or customer email is available.\n";
 }
 
-?>
+?>```

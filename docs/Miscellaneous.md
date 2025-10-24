@@ -86,4 +86,4 @@ try {
     echo "Error fetching Nigerian states: " . $e->getMessage() . "\n";
 }
 
-?>
+?>```

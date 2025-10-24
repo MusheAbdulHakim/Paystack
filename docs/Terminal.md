@@ -159,4 +159,4 @@ if ($commissionedTerminalId && $newTerminalSerialNumber) { // Only decommission 
     echo "\nSkipping decommission operation as no new terminal was commissioned in this run.\n";
 }
 
-?>
+?>```

@@ -116,4 +116,4 @@ try {
     echo "Error enabling OTP: " . $e->getMessage() . "\n";
 }
 
-?>
+?>```
