@@ -81,4 +81,4 @@ try {
     echo "Error resolving card BIN: " . $e->getMessage() . "\n";
 }
 
-?>
+?>```

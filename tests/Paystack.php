@@ -5,6 +5,31 @@ use MusheAbdulHakim\Paystack\Client;
 use MusheAbdulHakim\Paystack\Factory;
 use MusheAbdulHakim\Paystack\Paystack;
 
+it('can initialize the client factory', function () {
+    $factory = Paystack::init('secret');
+    expect($factory)->toBeInstanceOf(Factory::class);
+});
+
+it('can create a client with secret key', function () {
+    $client = Paystack::client('secret');
+    expect($client)->toBeInstanceOf(Client::class);
+});
+
+it('can create a client with secret key and base uri', function () {
+    $client = Paystack::client('secret', 'https://example.com');
+    expect($client)->toBeInstanceOf(Client::class);
+});
+
+it('can create a new factory instance', function () {
+    $factory = Paystack::factory();
+    expect($factory)->toBeInstanceOf(Factory::class);
+});
+
+it('should return a Factory instance when calling init', function () {
+    $factory = Paystack::init('test_secret');
+    expect($factory)->toBeInstanceOf(Factory::class);
+});
+
 it('may create client', function () {
     $paystack = Paystack::client('key');
     expect($paystack)->toBeInstanceOf(Client::class);

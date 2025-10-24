@@ -65,4 +65,4 @@ try {
     echo "Error verifying updated payment session timeout: " . $e->getMessage() . "\n";
 }
 
-?>
+?>```

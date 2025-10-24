@@ -166,4 +166,4 @@ if ($fixedPageId && $dummyProductId) {
     echo "\nSkipping addProduct operation as either page ID or dummy product ID is missing.\n";
 }
 
-?>
+?>```

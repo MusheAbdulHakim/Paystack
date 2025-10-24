@@ -106,4 +106,4 @@ if ($productId) {
     echo "\nSkipping product-specific operations as no valid product ID was obtained from creation.\n";
 }
 
-?>
+?>```

@@ -149,4 +149,4 @@ try {
     echo "Error deactivating authorization '{$sampleAuthorizationCode}': " . $e->getMessage() . "\n";
 }
 
-?>
+?>```

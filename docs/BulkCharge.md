@@ -119,4 +119,4 @@ if ($batchCode) {
     echo "\nSkipping batch-specific operations as no valid batch code was obtained from initiation.\n";
 }
 
-?>
+?>```
